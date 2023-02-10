@@ -6,7 +6,6 @@ const moment = require('moment');
 
 // Generate Token
 const generateTokens = async (userId, expires, type, secret = config.jwt.secret) => {
-  console.log(userId, expires, type);
   try {
     const payload = {
       sub: userId,
@@ -19,7 +18,6 @@ const generateTokens = async (userId, expires, type, secret = config.jwt.secret)
 
     const saveToken = await Token.create({ token, user: userId, expires: expires.toDate(), type });
     return saveToken;
-    
   } catch (err) {
     return Promise.reject('err in generate tokens :', err);
   }
@@ -28,13 +26,14 @@ const generateTokens = async (userId, expires, type, secret = config.jwt.secret)
 // Verify Token
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, config.jwt.secret);
-  console.log(payload);
-  const tokenFound = await Token.findOne({ token, type, user: payload.sub });
+
+  const tokenFound = await Token.findOne({ token, type, user: payload.sub }).exec();
   if (!tokenFound) {
     throw new Error('Token not found');
   }
   return tokenFound;
 };
+
 // Auth Token
 const generateAuthTokens = async (user) => {
   const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
@@ -54,5 +53,17 @@ const generateAuthTokens = async (user) => {
     },
   };
 };
+// Access Token
+const generateAccessToken = async (user) => {
+  const accessTokenExpires = moment().add(config.jwt.accessExpirationMinutes, 'minutes');
+  const accessToken = await generateTokens(user.id, accessTokenExpires, tokenTypes.ACCESS);
 
-module.exports = { generateTokens, verifyToken, generateAuthTokens };
+  return {
+    access: {
+      token: accessToken,
+      expires: accessTokenExpires.toDate(),
+    },
+  };
+};
+
+module.exports = { generateAccessToken, generateTokens, verifyToken, generateAuthTokens };
