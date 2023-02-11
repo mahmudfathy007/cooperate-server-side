@@ -9,7 +9,7 @@ const registerSchema = {
     firstname: Joi.string().required(),
     lastname: Joi.string().required(),
     country: Joi.string().required(),
-    type: Joi.string().valid('client', 'freelancer', 'admin'),
+    role: Joi.string().valid('client', 'freelancer', 'admin'),
   }),
 };
 
@@ -22,7 +22,6 @@ const authenticateSchema = {
 const logoutSchema = {
   body: Joi.object().keys({
     refreshToken: Joi.string().required(),
-    accessToken: Joi.string().required(),
   }),
 };
 const refreshTokenSchema = {

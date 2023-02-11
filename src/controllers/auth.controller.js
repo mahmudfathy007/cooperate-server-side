@@ -18,7 +18,7 @@ const register = async (req, res, next) => {
     const errorMessage = error.details.map((details) => details.message).join(', ');
     return res.status(400).json({ error: errorMessage });
   }
-  const { firstname, lastname, username, password, type, country, email } = req.body;
+  const { firstname, lastname, username, password, role, country, email } = req.body;
 
   // Email already taken
   if (await User.isEmailTaken(email)) {
@@ -39,7 +39,7 @@ const register = async (req, res, next) => {
       last_name: lastname,
       username: username,
       password: hashedPassword,
-      type: type,
+      role: role,
       country: country,
       email: email,
     });
@@ -75,8 +75,11 @@ const authenticate = async (req, res) => {
     const tokens = await generateAuthTokens(user);
 
     // return tokens
-    return res.status(200).json({ message: 'Login successfully', user, tokens });
-  } catch (error) {
+    return res.status(200).json({
+      accessToken: tokens.access.token,
+      refreshToken: tokens.refresh.token,
+    });
+  } catch (err) {
     return res.status(500).json({ message: 'an error occurred in authenticating user', error: err });
   }
 };
@@ -94,17 +97,18 @@ const logout = async (req, res) => {
 
   try {
     //extract refresh/access tokens
-    const { refreshToken, accessToken } = req.body;
+    const { refreshToken } = req.body;
 
     // find refresh/access tokens if exists
-    const RemoveAccessToken = await Token.findOne({ token: accessToken, type: tokenTypes.ACCESS }).exec();
-    const RemoveRefreshToken = await Token.findOne({ token: refreshToken, type: tokenTypes.REFRESH }).exec();
+    const RemoveRefreshToken = await Token.findOne({ token: refreshToken }).exec();
 
-    if (!RemoveAccessToken || !RemoveRefreshToken) {
+    !RemoveRefreshToken && res.status(200).send('token not found - logged out successfully!');
+
+    if (!RemoveRefreshToken) {
       return res.status(404).json({ error: 'Not Found' });
     }
     // remove refresh token/ access token
-    (await RemoveAccessToken.remove()) && (await RemoveRefreshToken.remove());
+    await RemoveRefreshToken.remove();
 
     // log the user out
     return res.status(200).json({ message: 'logged out successfully' });
@@ -124,42 +128,34 @@ const refreshToken = async (req, res) => {
     const errorMessage = error.details.map((details) => details.message).join(', ');
     return res.status(400).json({ error: errorMessage });
   }
-  try {
-    // extract refresh token
-    const { refreshToken } = req.body;
 
-    // verify token
-    if (!refreshToken) {
+  try {
+    const receivedRefreshToken = req.body.refreshToken;
+    if (!receivedRefreshToken) {
       return res.status(401).json({ error: 'Authorization failed' });
     }
 
-    const foundedRefreshToken = await Token.findOne({ token: refreshToken }).exec();
-
+    // 1 - find refresh-token in refreshToken model
+    const foundedRefreshToken = await Token.findOne({ token: receivedRefreshToken }).exec();
     if (!foundedRefreshToken) {
       return res.status(404).json({ error: 'refreshToken not found in tokenDB!' });
     }
 
-    const verifiedRefreshToken = await verifyToken(refreshToken, tokenTypes.REFRESH);
+    // 2 - verify token
+    const verifiedRefreshToken = await verifyToken(receivedRefreshToken);
+
     if (!verifiedRefreshToken) {
-      return res.status(401).json({ error: 'Unauthorized action' });
+      return res.status(404).json({ error: 'refreshToken not found in tokenDB!' });
     }
+    const user = await User.findOne({ _id: verifiedRefreshToken.user }).exec();
 
-    // search if user exist having this refresh token
-    const user = await User.findOne({ _id: foundedRefreshToken.user }).exec();
-
-    const oldAccessToken = await Token.findOne({ user: user.id, type: tokenTypes.ACCESS }).exec();
-
-    if (!user) {
-      throw new Error();
-    }
-    // remove expired token
-    oldAccessToken.remove();
-    // create new one
-    const newAccessToken = await generateAccessToken(user);
-
-    return res.status(200).json({ accessToken: newAccessToken });
+    // 3 - create new access token
+    const newAccessToken = generateAccessToken(user);
+    return res.status(200).json({ accessToken: newAccessToken.access.token });
   } catch (err) {
-    return res.status(401).json({ error: 'Please authenticate' });
+    return res.status(403).json({
+      error: 'Refresh token expired',
+    });
   }
 };
 

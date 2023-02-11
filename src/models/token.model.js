@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const { tokenTypes } = require('../config/tokens');
 
-const tokenSchema = mongoose.Schema(
+const RefreshTokenSchema = mongoose.Schema(
   {
     token: {
       type: String,
@@ -13,21 +12,20 @@ const tokenSchema = mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    type: {
-      type: String,
-      enum: [tokenTypes.REFRESH, tokenTypes.ACCESS],
-      required: true,
-    },
-    expires: {
+    createdAt: {
       type: Date,
-      required: true,
+      default: Date.now,
+      expires: 30 * 86400, // 30 days,
+    },
+    expireAt: {
+      type: Date,
+      expires: 30, // 30 days,
     },
   },
-  {
-    timestamps: true,
-  }
+
+  { collections: 'refreshToken' }
 );
 
-const Token = mongoose.model('Token', tokenSchema);
+const Token = mongoose.model('RefreshToken', RefreshTokenSchema);
 
 module.exports = Token;
