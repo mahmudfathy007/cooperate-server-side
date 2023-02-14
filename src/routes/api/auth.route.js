@@ -5,7 +5,7 @@ const authRoutes = express.Router();
 
 authRoutes.post('/register', authController.register);
 authRoutes.post('/authenticate', authController.authenticate);
-authRoutes.post('/logout', authenticate, authController.logout);
+authRoutes.delete('/logout', authenticate, authController.logout);
 authRoutes.post('/refresh-token', authController.refreshToken);
 
 module.exports = authRoutes;

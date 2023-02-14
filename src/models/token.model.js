@@ -19,7 +19,7 @@ const RefreshTokenSchema = mongoose.Schema(
     },
     expireAt: {
       type: Date,
-      expires: 30, // 30 days,
+      expires: 30 * 86400, // 30 days,
     },
   },
 

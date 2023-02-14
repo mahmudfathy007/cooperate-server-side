@@ -3,12 +3,16 @@ const config = require('../config/config');
 
 const authenticate = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  !authHeader && res.status(401).send('unauthorized');
+  if (!authHeader) {
+    return res.status(401).send('unauthorized');
+  }
   const token = authHeader.split(' ')[1];
 
   try {
     const verifiedToken = jwt.verify(token, config.jwt.secret);
-    !verifiedToken && res.status(403).send('invalid token inside try');
+    if (!verifiedToken) {
+      return res.status(403).send('invalid token.');
+    }
     req.user = verifiedToken;
     next();
   } catch (err) {

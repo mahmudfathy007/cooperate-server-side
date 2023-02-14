@@ -1,4 +1,3 @@
-const { tokenTypes } = require('../config/tokens');
 const Token = require('../models/token.model');
 const User = require('../models/user.model');
 const { generateAuthTokens, verifyToken, generateAccessToken } = require('../utils/Token');
@@ -102,7 +101,9 @@ const logout = async (req, res) => {
     // find refresh/access tokens if exists
     const RemoveRefreshToken = await Token.findOne({ token: refreshToken }).exec();
 
-    !RemoveRefreshToken && res.status(200).send('token not found - logged out successfully!');
+    if (!RemoveRefreshToken) {
+      return res.status(200).send('token not found - logged out successfully!');
+    }
 
     if (!RemoveRefreshToken) {
       return res.status(404).json({ error: 'Not Found' });
