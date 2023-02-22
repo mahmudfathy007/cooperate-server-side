@@ -7,7 +7,6 @@ const Joi = require('joi');
 
 const register = async (req, res, next) => {
   const body = { body: req.body };
-
   // Validate Input
   const { value, error } = Joi.compile(registerSchema)
     .prefs({ errors: { label: 'key' }, abortEarly: false })
@@ -15,17 +14,17 @@ const register = async (req, res, next) => {
   // Handle errors
   if (error) {
     const errorMessage = error.details.map((details) => details.message).join(', ');
-    return res.status(400).json({ error: errorMessage });
+    return res.status(400).json({ message: errorMessage });
   }
   const { firstname, lastname, username, password, role, country, email } = req.body;
 
   // Email already taken
   if (await User.isEmailTaken(email)) {
-    return res.status(409).json({ error: 'Email already taken' });
+    return res.status(409).json({ message: 'Email already taken.' });
   }
   // Username is already taken
   if (await User.isUsernameTaken(req.body.username)) {
-    return res.status(409).json({ error: 'Username already taken' });
+    return res.status(409).json({ message: 'Username already taken.' });
   }
   try {
     // password hashing
@@ -58,7 +57,7 @@ const authenticate = async (req, res) => {
     .validate(body);
   if (error) {
     const errorMessage = error.details.map((details) => details.message).join(', ');
-    return res.status(400).json({ error: errorMessage });
+    return res.status(400).json({ message: errorMessage });
   }
   const { email, password } = req.body;
   try {
@@ -67,7 +66,7 @@ const authenticate = async (req, res) => {
 
     // incorrect password or invalid email
     if (!user || !(await user.isPasswordMatch(password))) {
-      return res.status(422).json({ message: 'Invalid email or password' });
+      return res.status(422).json({ message: 'Incorrect email or password.' });
     }
 
     // generate tokens
@@ -91,7 +90,7 @@ const logout = async (req, res) => {
     .validate(body);
   if (error) {
     const errorMessage = error.details.map((details) => details.message).join(', ');
-    return res.status(400).json({ error: errorMessage });
+    return res.status(400).json({ message: errorMessage });
   }
 
   try {
@@ -100,10 +99,6 @@ const logout = async (req, res) => {
 
     // find refresh/access tokens if exists
     const RemoveRefreshToken = await Token.findOne({ token: refreshToken }).exec();
-
-    if (!RemoveRefreshToken) {
-      return res.status(200).send('token not found - logged out successfully!');
-    }
 
     if (!RemoveRefreshToken) {
       return res.status(404).json({ error: 'Not Found' });
@@ -127,26 +122,26 @@ const refreshToken = async (req, res) => {
     .validate(body);
   if (error) {
     const errorMessage = error.details.map((details) => details.message).join(', ');
-    return res.status(400).json({ error: errorMessage });
+    return res.status(400).json({ message: errorMessage });
   }
 
   try {
     const receivedRefreshToken = req.body.refreshToken;
     if (!receivedRefreshToken) {
-      return res.status(401).json({ error: 'Authorization failed' });
+      return res.status(401).json({ message: 'Authorization failed' });
     }
 
     // 1 - find refresh-token in refreshToken model
     const foundedRefreshToken = await Token.findOne({ token: receivedRefreshToken }).exec();
     if (!foundedRefreshToken) {
-      return res.status(404).json({ error: 'refreshToken not found in tokenDB!' });
+      return res.status(404).json({ message: 'refreshToken not found in tokenDB!' });
     }
 
     // 2 - verify token
     const verifiedRefreshToken = await verifyToken(receivedRefreshToken);
 
     if (!verifiedRefreshToken) {
-      return res.status(404).json({ error: 'refreshToken not found in tokenDB!' });
+      return res.status(404).json({ message: 'refreshToken not found in tokenDB!' });
     }
     const user = await User.findOne({ _id: verifiedRefreshToken.user }).exec();
 
@@ -155,7 +150,7 @@ const refreshToken = async (req, res) => {
     return res.status(200).json({ accessToken: newAccessToken.access.token });
   } catch (err) {
     return res.status(403).json({
-      error: 'Refresh token expired',
+      message: 'Refresh token expired',
     });
   }
 };
