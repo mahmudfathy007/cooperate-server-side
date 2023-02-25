@@ -40,7 +40,7 @@ const register = async (req, res, next) => {
       role: role,
       country: country,
       email: email,
-    });
+    }).save();
 
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {

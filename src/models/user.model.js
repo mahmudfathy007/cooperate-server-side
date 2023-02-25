@@ -131,8 +131,8 @@ const userSchema = mongoose.Schema(
       required: false,
       trim: true,
       validator: {
-        validator: function (url) {
-          return !!url && this.role === 'freelancer';
+        validator: function () {
+          return this.role === 'freelancer';
         },
         message: "Only users with the role 'freelancer' can add a Biography",
       },
@@ -142,8 +142,8 @@ const userSchema = mongoose.Schema(
       required: false,
       trim: true,
       validator: {
-        validator: function (url) {
-          return !!url && this.role === 'client';
+        validator: function () {
+          return this.role === 'client';
         },
         message: "Only users with the role 'freelancer' can add a Biography",
       },
@@ -176,6 +176,7 @@ userSchema.methods.isPasswordMatch = async function (password) {
   return bcrypt.compare(password, user.password);
 };
 
+// Middleware for password hashing
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
