@@ -16,7 +16,7 @@ const authenticate = async (req, res, next) => {
     req.user = verifiedToken;
     next();
   } catch (err) {
-    res.status(403).json({ msg: 'invalid token!', error: err });
+    res.status(403).json({ message: 'invalid token!', error: err });
   }
 };
 
