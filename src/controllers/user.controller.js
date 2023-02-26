@@ -89,4 +89,5 @@ module.exports = {
   changePassword,
   getUser,
   updateUser,
+  getUsers,
 };
