@@ -14,4 +14,7 @@ userRoutes.put('/change-password', authenticate, userController.changePassword);
 // @access  Private
 userRoutes.get('/:userId', authenticate, userController.getUser);
 
+userRoutes.patch('/:userId', authenticate, userController.updateUser);
+
+
 module.exports = userRoutes;
