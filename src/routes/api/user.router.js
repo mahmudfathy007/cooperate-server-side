@@ -24,6 +24,6 @@ userRoutes.get('/', authenticate, authorization('admin'), userController.getUser
 // @route   GET api/user
 // @desc    update single user
 // @access  Private
-userRoutes.patch('/:userId', authenticate, userController.updateUser);
+userRoutes.patch('/:userId', userController.updateUser);
 
 module.exports = userRoutes;
