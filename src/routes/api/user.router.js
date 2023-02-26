@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../../controllers/user.controller');
 const { authenticate } = require('../../middlewares/authentication');
+const { authorization } = require('../../middlewares/authorization');
 
 const userRoutes = express.Router();
 
@@ -13,5 +14,11 @@ userRoutes.put('/change-password', authenticate, userController.changePassword);
 // @desc    get single User info
 // @access  Private
 userRoutes.get('/:userId', authenticate, userController.getUser);
+
+// @route   GET api/user
+// @desc    get all users
+// @access  Private
+// @auth    Admin
+userRoutes.get('/', authenticate, authorization('admin'), userController.getUsers);
 
 module.exports = userRoutes;
