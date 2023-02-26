@@ -88,4 +88,5 @@ const updateUser = async (req, res) => {
 module.exports = {
   changePassword,
   getUser,
+  updateUser,
 };
