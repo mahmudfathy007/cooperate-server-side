@@ -66,9 +66,8 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
-
-  const {new_name} = req.body;
-  const  {userId}  = req.params;
+  const { new_name } = req.body;
+  const { userId } = req.params;
   try {
     // Find user by ID
     const user = await User.findById(userId).exec();
@@ -79,14 +78,12 @@ const updateUser = async (req, res) => {
     // Update the user's password and save changes to the database
     user.first_name = new_name;
     await user.save();
-    return res.status(200).json({ message:"User updated successfully"});
+    return res.status(200).json({ message: 'User updated successfully' });
   } catch (err) {
     // If there is an error during the process, return a 500 status code and error message
     return res.status(500).json({ message: err.message });
   }
 };
-
-
 
 module.exports = {
   changePassword,
