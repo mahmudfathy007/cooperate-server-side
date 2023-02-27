@@ -28,16 +28,12 @@ const register = async (req, res, next) => {
     return res.status(409).json({ message: 'Username already taken.' });
   }
   try {
-    // password hashing
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
     // create user
     const user = await User.create({
       first_name: firstname,
       last_name: lastname,
       username: username,
-      password: hashedPassword,
+      password: password,
       role: role,
       country: country,
       email: email,
