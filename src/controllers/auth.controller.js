@@ -1,4 +1,5 @@
 const Token = require('../models/token.model');
+const { sendEmail } = require('./../../services/sendEmail');
 const User = require('../models/user.model');
 const { generateAuthTokens, verifyToken, generateAccessToken } = require('../utils/Token');
 const bcrypt = require('bcryptjs');
@@ -41,6 +42,7 @@ const register = async (req, res, next) => {
       country: country,
       email: email,
     }).save();
+    // sendEmail(email , '<h1>welcom</h1>')
 
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {

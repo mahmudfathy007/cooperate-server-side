@@ -66,7 +66,7 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
-  const { new_name } = req.body;
+  const { new_first_name, new_last_name, new_email } = req.body;
   const { userId } = req.params;
   try {
     // Find user by ID
@@ -75,8 +75,11 @@ const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
     }
-    // Update the user's password and save changes to the database
-    user.first_name = new_name;
+    // Update the user's {first name , last name , email , address , phone , image URL ,
+    //country , Cv , language , education , bio , comp name ,   and save changes to the database
+    user.first_name = new_first_name;
+    user.last_name = new_last_name;
+    user.email = new_email;
     await user.save();
     return res.status(200).json({ message: 'User updated successfully' });
   } catch (err) {

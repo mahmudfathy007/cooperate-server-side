@@ -2353,6 +2353,18 @@ negotiator@0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
+nodejs-nodemailer-outlook@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/nodejs-nodemailer-outlook/-/nodejs-nodemailer-outlook-1.2.4.tgz#73aa4c8db74f3049aea889ec313de457443b2ca4"
+  integrity sha512-+AGxGRsMAwsXJNfm46/ELfNaj5tuMeoHV/3dR4C9TyAh54eYz2ZNNMHCICm7B3eTFdVtIHqIUsYNYg1Bju6J6A==
+  dependencies:
+    nodemailer "^6.4.16"
+
+nodemailer@^6.4.16:
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.9.1.tgz#8249d928a43ed85fec17b13d2870c8f758a126ed"
+  integrity sha512-qHw7dOiU5UKNnQpXktdgQ1d3OFgRAekuvbJLcdG5dnEo/GtcTHRYM7+UfJARdOFU9WUQO8OiIamgWPmiSFHYAA==
+
 nodemon@^2.0.20:
   version "2.0.20"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.20.tgz#e3537de768a492e8d74da5c5813cb0c7486fc701"
