@@ -1,27 +1,22 @@
-const nodeoutlook = require('nodejs-nodemailer-outlook')
+const nodeoutlook = require('nodejs-nodemailer-outlook');
 
-const sendEmail = (dest , message)  =>{
-    nodeoutlook.sendEmail({
-        auth: {
-            user: "cooperate121212@hotmail.com",
-            pass: "dongodongo121212"
-        },
-        from: 'cooperate121212@hotmail.com',
-        to: dest,
-        subject: 'Hey you, awesome!',
-        html: '<b>This is bold text</b>',
-        text: message ,
-      
-        onError: (e) => console.log(e),
-        onSuccess: (i) => console.log(i)
-    }
-    
-    
-    );
-    
-} 
+const sendEmail = (dest, message) => {
+  nodeoutlook.sendEmail({
+    auth: {
+      user: 'cooperate121212@hotmail.com',
+      pass: 'dongodongo121212',
+    },
+    from: 'cooperate121212@hotmail.com',
+    to: dest,
+    subject: 'Hey you, awesome!',
+    html: '<b>This is bold text</b>',
+    text: message,
 
+    onError: (e) => console.log(e),
+    onSuccess: (i) => console.log(i),
+  });
+};
 
 module.export = {
-    sendEmail,
-}
+  sendEmail,
+};
