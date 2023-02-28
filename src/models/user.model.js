@@ -145,7 +145,7 @@ const userSchema = mongoose.Schema(
         validator: function () {
           return this.role === 'client';
         },
-        message: "Only users with the role 'freelancer' can add a Biography",
+        message: "Only users with the role 'Clinet'",
       },
     },
     admin_rank: {

@@ -71,25 +71,32 @@ const updateUser = async (req, res) => {
 
     const user = await User.findById(userId).exec();
 
-    if(user.role === 'client'){
-      if(new_first_name === ''){
-        user.first_name = user.first_name
-      }else user.first_name = new_first_name
+      if(new_first_name != '' && !!new_first_name){
+      user.first_name = new_first_name
+    }
 
-      // if(new_last_name === ''){
-      //   user.last_name = user.lsat_name
-      // }else 
+      if(new_last_name != '' && !!new_last_name){
       user.last_name = new_last_name
+    }
+    
+    if(new_email != '' && !!new_email){
+      new_email = new_email
+    }
 
-      user.email = new_email;
-      user.address = new_address;
-      user.country = new_country;
+    if(new_address!= '' &&!!new_address){
+      user.address = new_address
+    }
+    if(new_country != '' &&!!new_country){
+      user.country = new_country
+    }
+    
+   
       await user.save();
       return res.status(200).json({ message: 'User updated successfully' });
     
   
     
-  }
+  
 
 }
   
