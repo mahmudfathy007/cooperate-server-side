@@ -76,7 +76,7 @@ const updateUser = async (req, res) => {
     const { userId } = req.params;
     
     try{
-      
+
       const user = await User.findById(userId).exec();
 
       if(new_first_name != '' && !!new_first_name){
@@ -134,13 +134,7 @@ const updateUser = async (req, res) => {
 }
 
 
-const postJob = async (req, res) => {
-    const {description , client_id , payment_type , project_length , category_id , experiance_level , budjet , title} = req.body;
 
-    if(user.role == 'client'){
-      
-    }
-}
   
 module.exports = {
   changePassword,
