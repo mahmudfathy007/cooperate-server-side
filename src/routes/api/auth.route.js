@@ -20,4 +20,6 @@ authRoutes.delete('/logout', authenticate, authController.logout);
 // @access  Public
 authRoutes.post('/refresh-token', authController.refreshToken);
 
+authRoutes.get('confrimEmail/:token' ,authController.confrimEmail)
+
 module.exports = authRoutes;

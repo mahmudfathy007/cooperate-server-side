@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const Joi = require('joi');
 const { changePasswordSchema } = require('../utils/Validation');
+const sendEmail = require('../services/sendEmail')
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -66,29 +67,58 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
-  const { new_first_name, new_last_name, new_email  , new_address  , new_country} = req.body;
-  const { userId } = req.params;
+  const { new_first_name, new_last_name, new_email  , new_address  ,
+     new_phone , new_imageUrl ,new_CvUrl, new_education , new_biography ,
+      new_company_name , new_country , new_language} = req.body;
 
+    const { userId } = req.params;
     const user = await User.findById(userId).exec();
+    
+    try{
 
       if(new_first_name != '' && !!new_first_name){
-      user.first_name = new_first_name
-    }
-
+        user.first_name = new_first_name
+      }
       if(new_last_name != '' && !!new_last_name){
-      user.last_name = new_last_name
+        user.last_name = new_last_name
+      }
+      if(new_email != '' && !!new_email){
+        user.new_email = new_email
+        let message = `<a href=".">Please Click Here To Update Your Email</a>`
+        sendEmail(new_email , message)
+      }
+      if(new_address!= '' &&!!new_address){
+        user.address = new_address
+      }
+      if(new_phone!= '' && !!new_phone){
+        user.phone = new_phone
+      }
+      if(new_country != '' &&!!new_country){
+        user.country = new_country
+      }
+      if(new_imageUrl != '' &&!!new_imageUrl){
+        user.imageUrl = new_imageUrl
+      }
+      if(new_education != '' &&!!new_education){
+        user.education = new_education
+      }
+      if(new_language != '' &&!!new_language){
+        user.language = new_language
+      }
+      if(new_CvUrl!= '' &&!!new_CvUrl && user.role ==='freelancer'){
+        user.CvUrl = new_CvUrl
+      }
+      if(new_biography!= '' &&!!new_biography ==='freelancer'){
+        user.biography = new_biography
+      }
+      if(new_company_name!= '' &&!!new_company_name ==='client'){
+        user.company_name = new_company_name
+      }
+    }
+    catch(err){
+      return res.status(500).json({ message: err.message });
     }
     
-    if(new_email != '' && !!new_email){
-      new_email = new_email
-    }
-
-    if(new_address!= '' &&!!new_address){
-      user.address = new_address
-    }
-    if(new_country != '' &&!!new_country){
-      user.country = new_country
-    }
     
    
       await user.save();

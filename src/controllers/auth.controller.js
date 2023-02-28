@@ -5,6 +5,7 @@ const { generateAuthTokens, verifyToken, generateAccessToken } = require('../uti
 const bcrypt = require('bcryptjs');
 const { registerSchema, authenticateSchema, logoutSchema, refreshTokenSchema } = require('../utils/Validation');
 const Joi = require('joi');
+const { jwt } = require('../config/config');
 
 const register = async (req, res, next) => {
   const body = { body: req.body };
@@ -38,13 +39,20 @@ const register = async (req, res, next) => {
       email,
       country,
     })
-    sendEmail(email , '<h1>helpppppppp</h1>')
+    // let token = jwt.sign({id:user._id} , process.env.jwt_secret)
+    let message = `<a href="http://localhost:8080/api/authenticate/confrimEmail">Please Click Here To Verify Your Email</a>`
+    sendEmail(email , message)
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {
     console.log(err)
     return res.status(500).json({ message: 'an error occurred in creating user', error: err });
   }
 };
+
+const confrimEmail = (req,res) =>{
+  let {token} = req.params;
+  res.json({message:"Helloo" , })
+}
 
 const authenticate = async (req, res) => {
   const body = { body: req.body };
@@ -158,4 +166,5 @@ module.exports = {
   authenticate,
   logout,
   refreshToken,
+  confrimEmail
 };
