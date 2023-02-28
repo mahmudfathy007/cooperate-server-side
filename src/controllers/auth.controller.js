@@ -40,7 +40,7 @@ const register = async (req, res, next) => {
       country,
     })
     // let token = jwt.sign({id:user._id} , process.env.jwt_secret)
-    let message = `<a href="http://localhost:8080/api/authenticate/confrimEmail">Please Click Here To Verify Your Email</a>`
+    let message = `<a href=".">Please Click Here To Verify Your Email</a>`
     sendEmail(email , message)
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {

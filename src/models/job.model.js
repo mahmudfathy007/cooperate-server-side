@@ -9,6 +9,8 @@ const jobSchema = new mongoose.Schema({
     client_id: {
         type :Number,
         required: true,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
     },
     payment_type: {
         type: String,
@@ -20,12 +22,14 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     category_id: {
-        type: Number,
-        required: true
+        required: true,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Category',
     },
     experiance_level: {
         type: String,
-        required: true
+        required: true,
+        enum: ['casas', 'saddas', 'dasdas']
     },
     budjet: {
         type: Number,
@@ -34,7 +38,6 @@ const jobSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        unique: true
     }
 
 

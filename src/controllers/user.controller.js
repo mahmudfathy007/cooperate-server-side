@@ -74,9 +74,10 @@ const updateUser = async (req, res) => {
       new_company_name , new_country , new_language} = req.body;
 
     const { userId } = req.params;
-    const user = await User.findById(userId).exec();
     
     try{
+      
+      const user = await User.findById(userId).exec();
 
       if(new_first_name != '' && !!new_first_name){
         user.first_name = new_first_name
