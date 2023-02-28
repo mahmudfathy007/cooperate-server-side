@@ -1,5 +1,5 @@
 const Token = require('../models/token.model');
-const sendEmail = require('../services/sendEmail')
+const sendEmail = require('../services/sendEmail');
 const User = require('../models/user.model');
 const { generateAuthTokens, verifyToken, generateAccessToken } = require('../utils/Token');
 const bcrypt = require('bcryptjs');
@@ -38,21 +38,21 @@ const register = async (req, res, next) => {
       role,
       email,
       country,
-    })
+    });
     // let token = jwt.sign({id:user._id} , process.env.jwt_secret)
-    let message = `<a href=".">Please Click Here To Verify Your Email</a>`
-    sendEmail(email , message)
+    let message = `<a href=".">Please Click Here To Verify Your Email</a>`;
+    sendEmail(email, message);
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     return res.status(500).json({ message: 'an error occurred in creating user', error: err });
   }
 };
 
-const confrimEmail = (req,res) =>{
-  let {token} = req.params;
-  res.json({message:"Helloo" , })
-}
+const confrimEmail = (req, res) => {
+  let { token } = req.params;
+  res.json({ message: 'Helloo' });
+};
 
 const authenticate = async (req, res) => {
   const body = { body: req.body };
@@ -166,5 +166,5 @@ module.exports = {
   authenticate,
   logout,
   refreshToken,
-  confrimEmail
+  confrimEmail,
 };

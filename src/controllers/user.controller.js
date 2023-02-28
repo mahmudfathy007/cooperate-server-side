@@ -1,7 +1,7 @@
 const User = require('../models/user.model');
 const Joi = require('joi');
 const { changePasswordSchema } = require('../utils/Validation');
-const {job} = require ('../models/job.model');
+const { job } = require('../models/job.model');
 const sendEmail = require('../services/sendEmail');
 const Job = require('../models/job.model');
 
@@ -68,74 +68,85 @@ const getUser = async (req, res, next) => {
   }
 };
 
+// Check for Empty Values
+const isDefinedAndNotEmpty = (value) => {
+  return value !== '' && !!value;
+};
 const updateUser = async (req, res) => {
-  const { new_first_name, new_last_name, new_email  , new_address  ,
-     new_phone , new_imageUrl ,new_CvUrl, new_education , new_biography ,
-      new_company_name , new_country , new_language} = req.body;
+  const {
+    new_first_name,
+    new_last_name,
+    new_email,
+    new_address,
+    new_phone,
+    new_imageUrl,
+    new_CvUrl,
+    new_education,
+    new_biography,
+    new_company_name,
+    new_country,
+    language,
+  } = req.body;
 
-    const { userId } = req.params;
-    
-    try{
+  const { userId } = req.params;
 
-      const user = await User.findById(userId).exec();
+  try {
+    const user = await User.findById(userId).exec();
 
-      if(new_first_name != '' && !!new_first_name){
-        user.first_name = new_first_name
-      }
-      if(new_last_name != '' && !!new_last_name){
-        user.last_name = new_last_name
-      }
-      if(new_email != '' && !!new_email){
-        user.new_email = new_email
-        let message = `<a href=".">Please Click Here To Update Your Email</a>`
-        sendEmail(new_email , message)
-      }
-      if(new_address!= '' &&!!new_address){
-        user.address = new_address
-      }
-      if(new_phone!= '' && !!new_phone){
-        user.phone = new_phone
-      }
-      if(new_country != '' &&!!new_country){
-        user.country = new_country
-      }
-      if(new_imageUrl != '' &&!!new_imageUrl){
-        user.imageUrl = new_imageUrl
-      }
-      if(new_education != '' &&!!new_education){
-        user.education = new_education
-      }
-      if(new_language != '' &&!!new_language){
-        user.language = new_language
-      }
-      if(new_CvUrl!= '' &&!!new_CvUrl && user.role ==='freelancer'){
-        user.CvUrl = new_CvUrl
-      }
-      if(new_biography!= '' &&!!new_biography ==='freelancer'){
-        user.biography = new_biography
-      }
-      if(new_company_name!= '' &&!!new_company_name ==='client'){
-        user.company_name = new_company_name
+    if (isDefinedAndNotEmpty(new_first_name)) {
+      user.first_name = new_first_name;
+    }
+    if (isDefinedAndNotEmpty(new_last_name)) {
+      user.last_name = new_last_name;
+    }
+    if (isDefinedAndNotEmpty(new_email)) {
+      user.new_email = new_email;
+      let message = `<a href=".">Please Click Here To Update Your Email</a>`;
+      sendEmail(new_email, message);
+    }
+    if (isDefinedAndNotEmpty(new_address)) {
+      user.address = new_address;
+    }
+    if (isDefinedAndNotEmpty(new_phone)) {
+      user.phone = new_phone;
+    }
+    if (isDefinedAndNotEmpty(new_country)) {
+      user.country = new_country;
+    }
+    if (isDefinedAndNotEmpty(new_imageUrl)) {
+      user.imageUrl = new_imageUrl;
+    }
+    if (isDefinedAndNotEmpty(new_education)) {
+      user.education = new_education;
+    }
+
+    // Handle language field
+    if (language && language.length > 0) {
+      for (const lang of language) {
+        const existingLang = user.language.find((l) => l.language === lang.language);
+        if (existingLang) {
+          existingLang.level = lang.level;
+        } else {
+          user.language.push({ language: lang.language, level: lang.level });
+        }
       }
     }
-    catch(err){
-      return res.status(500).json({ message: err.message });
+    if (isDefinedAndNotEmpty(new_CvUrl) && user.role === 'freelancer') {
+      user.CvUrl = new_CvUrl;
     }
-    
-    
-   
-      await user.save();
-      return res.status(200).json({ message: 'User updated successfully' });
-    
-  
-    
-  
+    if (isDefinedAndNotEmpty(new_biography) && user.role === 'freelancer') {
+      user.biography = new_biography;
+    }
+    if (isDefinedAndNotEmpty(new_company_name) && user.role === 'freelancer') {
+      user.company_name = new_company_name;
+    }
+    await user.save();
+    return res.status(200).json({ message: 'User updated successfully' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
 
-}
-
-
-
-  
 module.exports = {
   changePassword,
   getUser,

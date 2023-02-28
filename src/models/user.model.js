@@ -62,7 +62,7 @@ const userSchema = mongoose.Schema(
       trim: true,
     },
     phone: {
-      type: Number,
+      type: String,
       required: false,
       validate: {
         validator: function (phone) {
@@ -113,9 +113,9 @@ const userSchema = mongoose.Schema(
     language: {
       type: [
         {
-          id: { type: String, required: true },
+          _id: { type: mongoose.Types.ObjectId },
           language: { type: String, required: true },
-          level: { type: Number, required: true },
+          level: { type: String, enum: ['basic', 'conversational', 'fluent', 'native'], required: true },
         },
       ],
       required: false,
@@ -145,7 +145,7 @@ const userSchema = mongoose.Schema(
         validator: function () {
           return this.role === 'client';
         },
-        message: "Only users with the role 'Clinet'",
+        message: "Only users with the role 'Client'",
       },
     },
     admin_rank: {
@@ -154,6 +154,18 @@ const userSchema = mongoose.Schema(
       trim: true,
       enum: ['administrator', 'customer service'],
     },
+    categories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+      },
+    ],
+    skills: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Skill',
+      },
+    ],
   },
   {
     timestamps: true,
