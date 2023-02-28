@@ -9,8 +9,7 @@ const sendEmail = (dest, message) => {
     from: 'cooperate121212@hotmail.com',
     to: dest,
     subject: 'Hey you, awesome!',
-    html: '<b>This is bold text</b>',
-    text: message,
+    html: message,
 
     onError: (e) => console.log(e),
     onSuccess: (i) => console.log(i),

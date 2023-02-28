@@ -18,6 +18,7 @@ const register = async (req, res, next) => {
     return res.status(400).json({ message: errorMessage });
   }
   const { firstname, lastname, username, password, role, country, email } = req.body;
+
   // Email already taken
   if (await User.isEmailTaken(email)) {
     return res.status(409).json({ message: 'Email already taken.' });
@@ -31,14 +32,13 @@ const register = async (req, res, next) => {
     const user = await User.create({
       first_name: firstname,
       last_name: lastname,
-      username,
+      username: username,
+      password,
       role,
       email,
       country,
-      password,
-    });
-    // sendEmail(email , '<h1>welcom</h1>')
-
+    })
+    
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {
     return res.status(500).json({ message: 'an error occurred in creating user', error: err });

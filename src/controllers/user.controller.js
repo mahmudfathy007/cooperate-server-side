@@ -66,28 +66,33 @@ const getUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res) => {
-  const { new_first_name, new_last_name, new_email } = req.body;
+  const { new_first_name, new_last_name, new_email  , new_address  , new_country} = req.body;
   const { userId } = req.params;
-  try {
-    // Find user by ID
-    const user = await User.findById(userId).exec();
-    // If the user is not found, return a 404 status code and error message
-    if (!user) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-    // Update the user's {first name , last name , email , address , phone , image URL ,
-    //country , Cv , language , education , bio , comp name ,   and save changes to the database
-    user.first_name = new_first_name;
-    user.last_name = new_last_name;
-    user.email = new_email;
-    await user.save();
-    return res.status(200).json({ message: 'User updated successfully' });
-  } catch (err) {
-    // If there is an error during the process, return a 500 status code and error message
-    return res.status(500).json({ message: err.message });
-  }
-};
 
+    const user = await User.findById(userId).exec();
+
+    if(user.role === 'client'){
+      if(new_first_name === ''){
+        user.first_name = user.first_name
+      }else user.first_name = new_first_name
+
+      // if(new_last_name === ''){
+      //   user.last_name = user.lsat_name
+      // }else 
+      user.last_name = new_last_name
+
+      user.email = new_email;
+      user.address = new_address;
+      user.country = new_country;
+      await user.save();
+      return res.status(200).json({ message: 'User updated successfully' });
+    
+  
+    
+  }
+
+}
+  
 module.exports = {
   changePassword,
   getUser,
