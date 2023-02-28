@@ -1,4 +1,4 @@
-const { number } = require('joi');
+const { number, string, date } = require('joi');
 const mongoose = require('mongoose');
 
 const jobSchema = new mongoose.Schema({
@@ -7,7 +7,7 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     client_id: {
-        type :number,
+        type :Number,
         required: true,
     },
     payment_type: {
@@ -16,11 +16,11 @@ const jobSchema = new mongoose.Schema({
         enum: ['online', 'Fawry', 'paypal']
     },
     project_length: {
-        type : date,
+        type : Date,
         required: true
     },
     category_id: {
-        type: number,
+        type: Number,
         required: true
     },
     experiance_level: {
@@ -28,7 +28,7 @@ const jobSchema = new mongoose.Schema({
         required: true
     },
     budjet: {
-        type: number,
+        type: Number,
         required: true
     },
     title: {

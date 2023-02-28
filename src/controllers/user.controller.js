@@ -1,7 +1,9 @@
 const User = require('../models/user.model');
 const Joi = require('joi');
 const { changePasswordSchema } = require('../utils/Validation');
-const sendEmail = require('../services/sendEmail')
+const {job} = require ('../models/job.model');
+const sendEmail = require('../services/sendEmail');
+const Job = require('../models/job.model');
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -128,6 +130,15 @@ const updateUser = async (req, res) => {
     
   
 
+}
+
+
+const postJob = async (req, res) => {
+    const {description , client_id , payment_type , project_length , category_id , experiance_level , budjet , title} = req.body;
+
+    if(user.role == 'client'){
+      
+    }
 }
   
 module.exports = {
