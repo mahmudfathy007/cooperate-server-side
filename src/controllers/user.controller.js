@@ -1,9 +1,9 @@
 const User = require('../models/user.model');
 const Joi = require('joi');
 const { changePasswordSchema } = require('../utils/Validation');
-const { job } = require('../models/job.model');
 const sendEmail = require('../services/sendEmail');
-const Job = require('../models/job.model');
+const Category = require('../models/category.model');
+const Skill = require('../models/skill.model');
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -56,7 +56,20 @@ const getUser = async (req, res, next) => {
   const { userId } = req.params;
   try {
     // Find user by ID and exclude password field
-    const user = await User.findById(userId).select('-password').exec();
+    const user = await User.findById(userId)
+      .select('-password')
+      .populate({
+        path: 'categories',
+        select: 'name',
+        model: Category,
+      })
+      .populate({
+        path: 'skills',
+        select: 'name',
+        model: Skill,
+      })
+      .exec();
+    console.log(user);
     // If the user is not found, return a 404 status code and error message
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });

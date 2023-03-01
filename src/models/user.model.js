@@ -130,9 +130,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
       trim: true,
-      validator: {
-        validator: function () {
-          return this.role === 'freelancer';
+      validate: {
+        validator: function (value) {
+          return this.role === 'freelancer' || !value;
         },
         message: "Only users with the role 'freelancer' can add a Biography",
       },
@@ -141,9 +141,9 @@ const userSchema = mongoose.Schema(
       type: String,
       required: false,
       trim: true,
-      validator: {
-        validator: function () {
-          return this.role === 'client';
+      validate: {
+        validator: function (value) {
+          return this.role === 'client' || !value;
         },
         message: "Only users with the role 'Client'",
       },
@@ -154,16 +154,18 @@ const userSchema = mongoose.Schema(
       trim: true,
       enum: ['administrator', 'customer service'],
     },
-    categories: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-      },
-    ],
     skills: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Skill',
+        default: [],
+      },
+    ],
+    categories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        default: [],
       },
     ],
   },
