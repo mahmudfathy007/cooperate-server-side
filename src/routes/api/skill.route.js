@@ -5,6 +5,10 @@ const skillController = require('../../controllers/skill.controller');
 
 const skillRoutes = express.Router();
 
-skillRoutes.post('/addSkill', authenticate, authorization('admin'), skillController.addSkill);
+// @route   POST api/skill
+// @desc    get all users
+// @access  Private
+// @auth    Admin
+skillRoutes.post('/', skillController.addSkill);
 
 module.exports = skillRoutes;
