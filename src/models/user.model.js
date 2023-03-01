@@ -121,6 +121,23 @@ const userSchema = mongoose.Schema(
       required: false,
       default: [],
     },
+    personal_projects: {
+      type: [
+        {
+          _id: { type: mongoose.Types.ObjectId },
+          title: { type: String, required: true },
+          url: { type: String, required: true },
+        },
+      ],
+      required: false,
+      validate: [
+        function (val) {
+          return val.length <= 3;
+        },
+        'exceeds the limit of 3',
+      ],
+      default: [],
+    },
     education: {
       type: String,
       required: false,

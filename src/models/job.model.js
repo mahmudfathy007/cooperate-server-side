@@ -7,9 +7,8 @@ const jobSchema = new mongoose.Schema({
     required: true,
   },
   client_id: {
-    type: Number,
-    required: true,
     type: mongoose.SchemaTypes.ObjectId,
+    required: true,
     ref: 'User',
   },
   payment_type: {
@@ -21,17 +20,25 @@ const jobSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  category_id: {
+  category: {
     required: true,
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Category',
+    default: [],
   },
-  experiance_level: {
+  skills: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Skill',
+      default: [],
+    },
+  ],
+  experience_level: {
     type: String,
     required: true,
-    enum: ['casas', 'saddas', 'dasdas'],
+    enum: ['entry', 'intermediate', 'expert'],
   },
-  budjet: {
+  budget: {
     type: Number,
     required: true,
   },
