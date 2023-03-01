@@ -159,10 +159,77 @@ const updateUser = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+const updateSkills = async (req, res) => {
+  const { userId } = req.params;
+  const { skills } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the skills in the database or create them if they don't exist
+    const skillObjects = await Promise.all(
+      skills.map(async (skillName) => {
+        let skill = await Skill.findOne({ name: skillName });
+        if (!skill) {
+          return res.status(404).json({ message: 'skill not found' });
+        }
+        return skill;
+      })
+    );
+
+    // Update the user's skills array with the new skill objects
+    user.skills = skillObjects;
+
+    await user.save();
+
+    return res.status(200).json({ message: 'Skills updated successfully', skills });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const updateCategory = async (req, res) => {
+  const { userId } = req.params;
+  const { categories } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the skills in the database or create them if they don't exist
+    const categoryObjects = await Promise.all(
+      categories.map(async (categoryName) => {
+        let category = await Category.findOne({ name: categoryName });
+        if (!category) {
+          return res.status(404).json({ message: 'category not found' });
+        }
+        return category;
+      })
+    );
+
+    // Update the user's skills array with the new skill objects
+    user.categories = categoryObjects;
+
+    await user.save();
+
+    return res.status(200).json({ message: 'categories updated successfully', categories });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 module.exports = {
   changePassword,
   getUser,
   updateUser,
   getUsers,
+  updateSkills,
+  updateCategory,
 };

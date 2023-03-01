@@ -26,4 +26,8 @@ userRoutes.get('/', authenticate, authorization('admin'), userController.getUser
 // @access  Private
 userRoutes.patch('/:userId', userController.updateUser);
 
+
+userRoutes.put('/:userId/updateSkill', userController.updateSkills);
+userRoutes.put('/:userId/updateCategories', userController.updateCategory);
+
 module.exports = userRoutes;
