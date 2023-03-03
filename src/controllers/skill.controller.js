@@ -22,6 +22,20 @@ const addSkill = async (req, res) => {
   }
 };
 
+
+const getSkills = async (req, res, next) => {
+  try {
+    // Query the database for all Categories 
+    const skills = await Skill.find({})
+    // If the operation is successful, send the array of Categories back in the response body as JSON
+    return res.status(200).json({ skills });
+  } catch (error) {
+    // If there is an error, send a 500 status code with the error message in the response body as JSON
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   addSkill,
+  getSkills
 };
