@@ -22,11 +22,10 @@ const addSkill = async (req, res) => {
   }
 };
 
-
 const getSkills = async (req, res, next) => {
   try {
-    // Query the database for all Categories 
-    const skills = await Skill.find({})
+    // Query the database for all Categories
+    const skills = await Skill.find({});
     // If the operation is successful, send the array of Categories back in the response body as JSON
     return res.status(200).json({ skills });
   } catch (error) {
@@ -35,7 +34,22 @@ const getSkills = async (req, res, next) => {
   }
 };
 
+const deleteSkills = async (req, res) => {
+  const { skill } = req.body;
+  try {
+    const existingSkill = await Skill.findOne({ name: skill });
+    if (!existingSkill) {
+      return res.status(404).json({ message: 'Skill does not exist.' });
+    }
+    await existingSkill.remove();
+    return res.status(200).json({ message: 'Skill deleted successfully.' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   addSkill,
-  getSkills
+  getSkills,
+  deleteSkills,
 };

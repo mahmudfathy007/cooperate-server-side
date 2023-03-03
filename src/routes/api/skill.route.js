@@ -11,7 +11,8 @@ const skillRoutes = express.Router();
 // @auth    Admin
 skillRoutes.post('/', skillController.addSkill);
 
-skillRoutes.get('/',  skillController.getSkills);
+skillRoutes.get('/', skillController.getSkills);
 
+skillRoutes.delete('/', skillController.deleteSkills);
 
 module.exports = skillRoutes;
