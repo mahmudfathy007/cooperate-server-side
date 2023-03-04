@@ -21,18 +21,11 @@ const jobSchema = new mongoose.Schema({
     required: true,
   },
   category: {
-    required: true,
+    // required: true,
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Category',
-    default: [],
   },
-  skills: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Skill',
-      default: [],
-    },
-  ],
+
   experience_level: {
     type: String,
     required: true,

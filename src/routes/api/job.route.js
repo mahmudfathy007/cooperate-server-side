@@ -7,4 +7,10 @@ const jobRoutes = express.Router();
 
 jobRoutes.post('/:userId', jobController.postJob);
 
+jobRoutes.get('/', jobController.getJobs);
+
+jobRoutes.delete('/:userId', jobController.deleteJob);
+
+jobRoutes.patch('/:userId', jobController.updateJob);
+
 module.exports = jobRoutes;
