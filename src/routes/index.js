@@ -13,5 +13,4 @@ routes.use('/skill', skillRoutes);
 routes.use('/category', categoryRoutes);
 routes.use('/job', jobRoutes);
 
-
 module.exports = routes;
