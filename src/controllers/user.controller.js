@@ -69,7 +69,7 @@ const getUser = async (req, res, next) => {
         model: Skill,
       })
       .exec();
-    console.log(user);
+
     // If the user is not found, return a 404 status code and error message
     if (!user) {
       return res.status(404).json({ message: 'User not found.' });
@@ -187,7 +187,6 @@ const updateSkills = async (req, res) => {
 
     return res.status(200).json({ message: 'Skills updated successfully', skills });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 };
@@ -220,7 +219,6 @@ const updateCategory = async (req, res) => {
 
     return res.status(200).json({ message: 'categories updated successfully', categories });
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: 'Internal server error' });
   }
 };

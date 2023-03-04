@@ -1,4 +1,5 @@
 const Category = require('../models/category.model');
+const SKill = require('../models/skill.model');
 
 const addCategory = async (req, res) => {
   try {
@@ -15,18 +16,22 @@ const addCategory = async (req, res) => {
 };
 
 const getCategories = async (req, res, next) => {
-    try {
-      // Query the database for all Categories 
-      const categories = await Category.find({})
-      // If the operation is successful, send the array of Categories back in the response body as JSON
-      return res.status(200).json({ categories });
-    } catch (error) {
-      // If there is an error, send a 500 status code with the error message in the response body as JSON
-      return res.status(500).json({ message: error.message });
-    }
-  };
+  try {
+    // Query the database for all Categories
+    const categories = await Category.find({}).populate({
+      path: 'skills',
+      select: 'name',
+      model: SKill,
+    });
+    // If the operation is successful, send the array of Categories back in the response body as JSON
+    return res.status(200).json({ categories });
+  } catch (error) {
+    // If there is an error, send a 500 status code with the error message in the response body as JSON
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   addCategory,
-  getCategories
+  getCategories,
 };

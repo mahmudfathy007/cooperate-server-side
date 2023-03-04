@@ -7,9 +7,6 @@ const categoryRoutes = express.Router();
 
 categoryRoutes.post('/', categoryController.addCategory);
 
-
-categoryRoutes.get('/',  categoryController.getCategories);
-
-
+categoryRoutes.get('/', categoryController.getCategories);
 
 module.exports = categoryRoutes;
