@@ -4,6 +4,7 @@ const { changePasswordSchema } = require('../utils/Validation');
 const sendEmail = require('../services/sendEmail');
 const Category = require('../models/category.model');
 const Skill = require('../models/skill.model');
+const Job = require('../models/job.model');
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -67,6 +68,10 @@ const getUser = async (req, res, next) => {
         path: 'skills',
         select: 'name',
         model: Skill,
+      })
+      .populate({
+        path: 'jobs',
+        model: Job,
       })
       .exec();
 

@@ -14,6 +14,19 @@ const userSchema = mongoose.Schema(
       required: [true, 'Please enter your last name'],
       trim: true,
     },
+    jobs: [
+      {
+        // required: true,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Job',
+        validate: {
+          validator: function (value) {
+            return this.role === 'client' || !value;
+          },
+          message: "Only users with the role 'Client'",
+        },
+      },
+    ],
     email: {
       type: String,
       required: [true, 'Please enter your email'],

@@ -6,11 +6,6 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  client_id: {
-    type: mongoose.SchemaTypes.ObjectId,
-    required: true,
-    ref: 'User',
-  },
   payment_type: {
     type: String,
     required: [true, 'Please Choose your payment method'],
@@ -25,6 +20,13 @@ const jobSchema = new mongoose.Schema({
     type: mongoose.SchemaTypes.ObjectId,
     ref: 'Category',
   },
+  skills: [
+    {
+      // required: true,
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Skill',
+    },
+  ],
 
   experience_level: {
     type: String,

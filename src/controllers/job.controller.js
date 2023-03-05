@@ -1,30 +1,44 @@
 const Job = require('../models/job.model');
+const Skill = require('../models/skill.model');
+const User = require('../models/user.model');
 
 const postJob = async (req, res) => {
   const { userId } = req.params;
-  const { description, payment_type, project_length, category_id, experience_level, budget, title } = req.body;
+  const { description, payment_type, skills, project_length, category_id, experience_level, budget, title } = req.body;
 
   try {
+    const skillObjects = await Promise.all(
+      skills.map(async (skillName) => {
+        let skill = await Skill.findOne({ name: skillName });
+        if (!skill) {
+          skill = await Skill.create({ name: skillName });
+        }
+        return skill;
+      })
+    );
+    const user = await User.findById(userId);
     const newJob = await Job.create({
       description,
       payment_type,
       project_length,
       category_id,
+      skills: skillObjects,
       experience_level,
       budget,
       title,
       client_id: userId,
     });
+    user.jobs.push(newJob);
+    await user.save();
     return res.status(201).json({ message: 'New Job created successfully', newJob });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 };
-
 const getJobs = async (req, res, next) => {
   try {
     // Query the database for all Categories
-    const jobs = await Job.find({});
+    const jobs = await Job.find();
     // If the operation is successful, send the array of Categories back in the response body as JSON
     return res.status(200).json({ jobs });
   } catch (error) {
@@ -89,9 +103,20 @@ const updateJob = async (req, res) => {
   }
 };
 
+const getJob = async (req, res) => {
+  const { jobId } = req.params;
+  try {
+    const job = await Job.findById(jobId);
+    return res.status(200).json({ job });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   postJob,
   getJobs,
   deleteJob,
   updateJob,
+  getJob,
 };

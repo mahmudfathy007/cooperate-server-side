@@ -13,7 +13,7 @@ userRoutes.put('/change-password', authenticate, userController.changePassword);
 // @route   GET api/user/:userId
 // @desc    get single User info
 // @access  Private
-userRoutes.get('/:userId', authenticate, userController.getUser);
+userRoutes.get('/:userId', userController.getUser);
 
 // @route   GET api/user
 // @desc    get all users

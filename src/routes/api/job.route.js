@@ -9,6 +9,8 @@ jobRoutes.post('/:userId', jobController.postJob);
 
 jobRoutes.get('/', jobController.getJobs);
 
+jobRoutes.get('/:jobId', jobController.getJob);
+
 jobRoutes.delete('/:userId', jobController.deleteJob);
 
 jobRoutes.patch('/:userId', jobController.updateJob);

@@ -18,7 +18,7 @@ const projectSchema = new mongoose.Schema({
   project_status: {
     type: String,
     required: true,
-    enum: ['25%', '50%', '75%'],
+    enum: ['Active', 'Complete'],
   },
   Dead_line: {
     type: Date,
