@@ -1,11 +1,11 @@
 const Job = require('../models/job.model');
 const Skill = require('../models/skill.model');
 const User = require('../models/user.model');
+const Category = require('../models/category.model');
 
 const postJob = async (req, res) => {
   const { userId } = req.params;
-  const { description, payment_type, skills, project_length, category_id, experience_level, budget, title } = req.body;
-
+  const { description, payment_type, skills, project_length, category_name, experience_level, budget, title } = req.body;
   try {
     const skillObjects = await Promise.all(
       skills.map(async (skillName) => {
@@ -16,12 +16,17 @@ const postJob = async (req, res) => {
         return skill;
       })
     );
+
     const user = await User.findById(userId);
+    const category = await Category.findOne({ name: category_name });
+    if (!category) {
+      return res.status(404).json({ message: 'No category found.' });
+    }
     const newJob = await Job.create({
       description,
       payment_type,
       project_length,
-      category_id,
+      category: category._id,
       skills: skillObjects,
       experience_level,
       budget,
@@ -106,7 +111,17 @@ const updateJob = async (req, res) => {
 const getJob = async (req, res) => {
   const { jobId } = req.params;
   try {
-    const job = await Job.findById(jobId);
+    const job = await Job.findById(jobId)
+      .populate({
+        path: 'category',
+        select: 'name ',
+        model: Category,
+      })
+      .populate({
+        path: 'skills ',
+        select: 'name',
+        model: Skill,
+      });
     return res.status(200).json({ job });
   } catch (error) {
     return res.status(500).json({ message: error.message });

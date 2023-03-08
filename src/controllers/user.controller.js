@@ -71,7 +71,19 @@ const getUser = async (req, res, next) => {
       })
       .populate({
         path: 'jobs',
-        model: Job,
+        populate: {
+          path: 'category',
+          select: 'name',
+          model: Category,
+        },
+      })
+      .populate({
+        path: 'jobs',
+        populate: {
+          path: 'skills',
+          select: 'name',
+          model: Skill,
+        },
       })
       .exec();
 
@@ -141,11 +153,16 @@ const updateUser = async (req, res) => {
     // Handle language field
     if (language && language.length > 0) {
       for (const lang of language) {
-        const existingLang = user.language.find((l) => l.language === lang.language);
-        if (existingLang) {
-          existingLang.level = lang.level;
+        if (!lang.level) {
+          // Delete language if level is not provided
+          user.language = user.language.filter((l) => l.language !== lang.language);
         } else {
-          user.language.push({ language: lang.language, level: lang.level });
+          const existingLang = user.language.find((l) => l.language === lang.language);
+          if (existingLang) {
+            existingLang.level = lang.level;
+          } else {
+            user.language.push({ language: lang.language, level: lang.level });
+          }
         }
       }
     }
@@ -155,7 +172,7 @@ const updateUser = async (req, res) => {
     if (isDefinedAndNotEmpty(new_biography) && user.role === 'freelancer') {
       user.biography = new_biography;
     }
-    if (isDefinedAndNotEmpty(new_company_name) && user.role === 'freelancer') {
+    if (isDefinedAndNotEmpty(new_company_name) && user.role === 'client') {
       user.company_name = new_company_name;
     }
     await user.save();
