@@ -18,8 +18,6 @@ const sendIvitation = async (req, res) => {
       return res.status(404).json({ message: ' you cannot send invitation , Job does not exist.' });
     }
 
-
-
     const invitation = await Invitation.create({
       client_id: userId,
       freelancer_id,
