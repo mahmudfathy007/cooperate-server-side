@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const proposalSchema = new mongoose.Schema(
+const invitationSchema = new mongoose.Schema(
   {
     freelancer_id: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -17,27 +17,9 @@ const proposalSchema = new mongoose.Schema(
       required: true,
       ref: 'Job',
     },
-    cover_letter: {
+    invitation_letter: {
       type: String,
       required: true,
-    },
-    website_link: {
-      type: String,
-    },
-    files: {
-      type: String,
-    },
-    proposal_status: {
-      type: String,
-      enum: ['pending', 'accepted'],
-    },
-    payment_id: {
-      type: String,
-      ref: 'Job',
-    },
-    budget: {
-      type: Number,
-      ref: 'Job',
     },
   },
   {
@@ -45,6 +27,6 @@ const proposalSchema = new mongoose.Schema(
   }
 );
 
-const Proposal = mongoose.model('Proposal', proposalSchema);
+const Invitation = mongoose.model('Invitation', invitationSchema);
 
-module.exports = Proposal;
+module.exports = Invitation;

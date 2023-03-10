@@ -1,18 +1,23 @@
 const mongoose = require('mongoose');
 
-const categorySchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  skills: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Skill',
+const categorySchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
     },
-  ],
-});
+    skills: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Skill',
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
 const Category = mongoose.model('Category', categorySchema);
 
