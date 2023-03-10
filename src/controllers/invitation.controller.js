@@ -11,8 +11,15 @@ const sendIvitation = async (req, res) => {
     if (existingInvitation) {
       return res.status(404).json({ message: 'you have sent Invitation for this Freelancer about this job before' });
     }
-    const client = await User.findOne({ jobs: job_id });
-    console.log(client);
+
+    const existingJob = await Job.findById(job_id);
+    console.log('existingJob:', existingJob);
+    if (!existingJob) {
+      return res.status(404).json({ message: ' you cannot send invitation , Job does not exist.' });
+    }
+
+
+
     const invitation = await Invitation.create({
       client_id: userId,
       freelancer_id,
