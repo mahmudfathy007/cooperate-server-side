@@ -4,13 +4,18 @@ const projectSchema = new mongoose.Schema(
   {
     client_id: {
       type: mongoose.SchemaTypes.ObjectId,
-      required: true,
+      // required: true,
       ref: 'User',
     },
     Freelancer_id: {
       type: mongoose.SchemaTypes.ObjectId,
-      required: true,
+      // required: true,
       ref: 'User',
+    },
+    job: {
+      type: mongoose.SchemaTypes.ObjectId,
+      // required: true,
+      ref: 'Job',
     },
     files: {
       type: String,
@@ -18,16 +23,8 @@ const projectSchema = new mongoose.Schema(
     },
     project_status: {
       type: String,
-      required: true,
+      // required: true,
       enum: ['Active', 'Complete'],
-    },
-    Dead_line: {
-      type: Date,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
     },
   },
   {

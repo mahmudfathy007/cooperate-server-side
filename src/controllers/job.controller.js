@@ -57,7 +57,6 @@ const deleteJob = async (req, res) => {
   const { jobId } = req.body;
   try {
     const existingJob = await Job.findById(jobId);
-    console.log('existingJob:', existingJob);
     if (!existingJob) {
       return res.status(404).json({ message: 'Job does not exist.' });
     }

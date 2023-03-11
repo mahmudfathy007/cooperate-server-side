@@ -12,7 +12,6 @@ const sendProposal = async (req, res) => {
       return res.status(404).json({ message: 'you have sent proposal for this job before' });
     }
     const client = await User.findOne({ jobs: job_id });
-    console.log(client);
     const proposal = await Proposal.create({
       freelancer_id: userId,
       job_id,
