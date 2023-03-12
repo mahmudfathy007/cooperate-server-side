@@ -40,11 +40,24 @@ const getClientProposals = async (req, res) => {
     }
     return res.status(404).json({ message: 'no proposals found' });
   } catch (error) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const declineProposal = async (req, res) => {
+  const { proposal_id } = req.body;
+  try {
+    const existingProposal = await Proposal.findByIdAndUpdate(proposal_id, { proposal_status: 'declined' });
+    if (existingProposal) {
+      return res.status(200).json({ message: 'proposal declined' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
   }
 };
 
 module.exports = {
   sendProposal,
   getClientProposals,
+  declineProposal,
 };

@@ -9,4 +9,6 @@ proposalRoutes.post('/:userId', proposalController.sendProposal);
 
 proposalRoutes.get('/:userId', proposalController.getClientProposals);
 
+proposalRoutes.put('/', proposalController.declineProposal);
+
 module.exports = proposalRoutes;

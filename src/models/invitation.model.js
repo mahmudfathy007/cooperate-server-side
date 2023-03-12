@@ -20,6 +20,7 @@ const invitationSchema = new mongoose.Schema(
     invitation_letter: {
       type: String,
       required: true,
+      trim: true,
     },
   },
   {

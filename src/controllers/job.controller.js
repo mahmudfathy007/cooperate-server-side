@@ -113,11 +113,11 @@ const getJob = async (req, res) => {
     const job = await Job.findById(jobId)
       .populate({
         path: 'category',
-        select: 'name ',
+        select: 'name',
         model: Category,
       })
       .populate({
-        path: 'skills ',
+        path: 'skills',
         select: 'name',
         model: Skill,
       });

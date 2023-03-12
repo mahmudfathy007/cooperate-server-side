@@ -7,4 +7,6 @@ const milestoneRoutes = express.Router();
 
 milestoneRoutes.post('/:projectId', milestoneController.createMilestone);
 
+milestoneRoutes.put('/:milestoneId', milestoneController.updateMilestone);
+
 module.exports = milestoneRoutes;

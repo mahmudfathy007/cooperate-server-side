@@ -2,13 +2,15 @@ const mongoose = require('mongoose');
 
 const milestoneSchema = new mongoose.Schema(
   {
-    Tittle: {
+    title: {
       type: String,
       // required: true,
     },
     status: {
       type: String,
       // required: true,
+      enum: ['Pending', 'Complete'],
+      default: 'Pending',
     },
   },
   {

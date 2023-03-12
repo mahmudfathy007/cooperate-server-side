@@ -6,6 +6,7 @@ const categorySchema = mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      trim: true,
     },
     skills: [
       {

@@ -6,7 +6,7 @@ const User = require('../models/user.model');
 const createProject = async (req, res) => {
   const { proposal_id } = req.body;
   try {
-    const existingProposal = await Proposal.findById(proposal_id);
+    const existingProposal = await Proposal.findByIdAndUpdate(proposal_id, { proposal_status: 'accepted' });
     if (existingProposal) {
       const job = await Job.findByIdAndUpdate(existingProposal.job_id, { status: true });
       if (job) {
