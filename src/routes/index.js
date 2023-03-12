@@ -8,6 +8,7 @@ const jobRoutes = require('./api/job.route');
 const proposalRoutes = require('./api/proposal.route');
 const invitationRoutes = require('./api/invitation.route');
 const projectRoutes = require('./api/project.route');
+const milestoneRoutes = require('./api/milestone.route');
 
 // Routes
 routes.use('/', authRoutes);
@@ -18,5 +19,6 @@ routes.use('/job', jobRoutes);
 routes.use('/proposal', proposalRoutes);
 routes.use('/invitation', invitationRoutes);
 routes.use('/project', projectRoutes);
+routes.use('/milestone', milestoneRoutes);
 
 module.exports = routes;

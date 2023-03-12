@@ -4,17 +4,14 @@ const projectSchema = new mongoose.Schema(
   {
     client_id: {
       type: mongoose.SchemaTypes.ObjectId,
-      // required: true,
       ref: 'User',
     },
     Freelancer_id: {
       type: mongoose.SchemaTypes.ObjectId,
-      // required: true,
       ref: 'User',
     },
     job: {
       type: mongoose.SchemaTypes.ObjectId,
-      // required: true,
       ref: 'Job',
     },
     files: {
@@ -23,15 +20,21 @@ const projectSchema = new mongoose.Schema(
     },
     project_status: {
       type: String,
-      // required: true,
-      enum: ['Active', 'Complete'],
+      enum: ['In progress', 'Complete'],
+      default: 'In progress',
     },
+    milestone: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Milestone',
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-const Project = mongoose.model('project', projectSchema);
+const Project = mongoose.model('Project', projectSchema);
 
 module.exports = Project;
