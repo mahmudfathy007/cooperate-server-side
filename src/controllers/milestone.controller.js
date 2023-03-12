@@ -3,8 +3,10 @@ const Project = require('../models/project.model');
 
 const createMilestone = async (req, res) => {
   try {
+    //take the projectId and the title to create the milestone
     const { projectId } = req.params;
     const { title } = req.body;
+    //check if the project is already exists or not
     const existingProject = await Project.findById(projectId);
     if (existingProject) {
       const milestone = await Milestone.create({

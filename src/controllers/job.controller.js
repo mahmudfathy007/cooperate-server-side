@@ -2,6 +2,7 @@ const Job = require('../models/job.model');
 const Skill = require('../models/skill.model');
 const User = require('../models/user.model');
 const Category = require('../models/category.model');
+const Project = require('../models/project.model');
 
 const postJob = async (req, res) => {
   const { userId } = req.params;
@@ -56,11 +57,18 @@ const deleteJob = async (req, res) => {
   const { userId } = req.params;
   const { jobId } = req.body;
   try {
+    // check if the job exists
     const existingJob = await Job.findById(jobId);
     if (!existingJob) {
       return res.status(404).json({ message: 'Job does not exist.' });
     }
     if (userId === existingJob.client_id.toString()) {
+      //if the user already access any freelancer's proposal he cannot delete this job
+      const isAcceptedJob = await Project.findOne({ job: existingJob });
+      if (isAcceptedJob) {
+        return res.status(404).json({ message: 'you cannot delete this Job because it is assigned to a freelancer.' });
+      }
+      // remove the job
       await existingJob.remove();
       return res.status(200).json({ message: 'Job deleted successfully.' });
     }
@@ -79,6 +87,11 @@ const updateJob = async (req, res) => {
 
   try {
     const existingJob = await Job.findById(jobId);
+    //if the user already access any freelancer's proposal he cannot update this job
+    const isAcceptedJob = await Project.findOne({ job: existingJob });
+    if (isAcceptedJob) {
+      return res.status(404).json({ message: 'you cannot update this Job because it is assigned to a freelancer.' });
+    }
     if (userId === existingJob.client_id.toString()) {
       if (isDefinedAndNotEmpty(new_title)) {
         existingJob.title = new_title;

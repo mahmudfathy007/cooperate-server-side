@@ -5,6 +5,10 @@ const invitationController = require('../../controllers/invitation.controller');
 
 const invitationRoutes = express.Router();
 
+// @route   POST api/invitation/:userId
+// @desc    send invitation to freelancer
+// @access  Private
+// @auth    Freelancer
 invitationRoutes.post('/:userId', invitationController.sendIvitation);
 
 module.exports = invitationRoutes;

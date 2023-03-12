@@ -10,9 +10,15 @@ const skillRoutes = express.Router();
 // @access  Private
 // @auth    Admin
 skillRoutes.post('/', skillController.addSkill);
-
+// @route   GET api/skill
+// @desc    get all skills
+// @access  Private
+// @auth    Admin
 skillRoutes.get('/', skillController.getSkills);
-
+// @route   DELETE api/skill
+// @desc    delete Skill
+// @access  Private
+// @auth    Admin
 skillRoutes.delete('/', skillController.deleteSkills);
 
 module.exports = skillRoutes;
