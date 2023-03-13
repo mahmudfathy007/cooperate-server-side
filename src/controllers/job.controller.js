@@ -45,16 +45,16 @@ const getJobs = async (req, res, next) => {
   try {
     // Query the database for all Categories
     const jobs = await Job.find()
-    .populate({
-      path: 'skills',
-      select: 'name',
-      model : Skill,
-    })
-    .populate({
-      path: 'category',
-      select: 'name',
-      model : Category,
-    });
+      .populate({
+        path: 'skills',
+        select: 'name',
+        model: Skill,
+      })
+      .populate({
+        path: 'category',
+        select: 'name',
+        model: Category,
+      });
     // If the operation is successful, send the array of Categories back in the response body as JSON
     return res.status(200).json({ jobs });
   } catch (error) {
