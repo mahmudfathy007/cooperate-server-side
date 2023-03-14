@@ -5,6 +5,7 @@ const sendEmail = require('../services/sendEmail');
 const Category = require('../models/category.model');
 const Skill = require('../models/skill.model');
 const Job = require('../models/job.model');
+const { cloudinary } = require('../middlewares/cloudinary');
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -245,6 +246,14 @@ const updateCategory = async (req, res) => {
   }
 };
 
+const profilePic = async (req, res) => {
+  const image = await cloudinary.uploader.upload(req.file.path, {
+    folder: 'user',
+  });
+  console.log(image);
+  res.json({ message: 'Done' });
+};
+
 module.exports = {
   changePassword,
   getUser,
@@ -252,4 +261,5 @@ module.exports = {
   getUsers,
   updateSkills,
   updateCategory,
+  profilePic,
 };

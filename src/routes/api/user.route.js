@@ -2,6 +2,7 @@ const express = require('express');
 const userController = require('../../controllers/user.controller');
 const { authenticate } = require('../../middlewares/authentication');
 const { authorization } = require('../../middlewares/authorization');
+const { handleFileUpload, uploadImage } = require('../../middlewares/multer');
 
 const userRoutes = express.Router();
 
@@ -32,5 +33,7 @@ userRoutes.put('/:userId/updateSkills', userController.updateSkills);
 // @access  Private
 // @auth    Freelancer
 userRoutes.put('/:userId/updateCategories', userController.updateCategory);
+
+userRoutes.post('/profilePic', handleFileUpload(uploadImage), userController.profilePic);
 
 module.exports = userRoutes;
