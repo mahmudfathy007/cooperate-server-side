@@ -40,7 +40,7 @@ const getProjects = async (req, res) => {
   try {
     const { userId } = req.params;
     const projects = await Project.find({
-      $or: [{ client_id: userId }, { freelancer_id: userId }],
+      $or: [{ client_id: userId }, { Freelancer_id: userId }],
     })
       .populate({
         path: 'jobs',
