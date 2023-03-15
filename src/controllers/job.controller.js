@@ -44,7 +44,7 @@ const postJob = async (req, res) => {
 const getJobs = async (req, res, next) => {
   try {
     // Query the database for all Categories
-    const jobs = await Job.find()
+    const jobs = await Job.find({ status: false })
       .populate({
         path: 'skills',
         select: 'name',
