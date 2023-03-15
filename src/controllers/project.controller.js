@@ -2,6 +2,9 @@ const Job = require('../models/job.model');
 const Project = require('../models/project.model');
 const Proposal = require('../models/proposal.model');
 const User = require('../models/user.model');
+const Category = require('../models/category.model');
+const Skill = require('../models/skill.model');
+const Milestone = require('../models/milestone.model');
 
 const createProject = async (req, res) => {
   const { proposal_id } = req.body;
@@ -38,7 +41,27 @@ const getProjects = async (req, res) => {
     const { userId } = req.params;
     const projects = await Project.find({
       $or: [{ client_id: userId }, { freelancer_id: userId }],
-    });
+    })
+      .populate({
+        path: 'jobs',
+        populate: {
+          path: 'category',
+          select: 'name',
+          model: Category,
+        },
+      })
+      .populate({
+        path: 'jobs',
+        populate: {
+          path: 'skills',
+          select: 'name',
+          model: Skill,
+        },
+      })
+      .populate({
+        path: 'milestone',
+        model: Milestone,
+      });
     return res.status(200).json({ projects });
   } catch (error) {
     return res.status(500).json({ message: error.message });
