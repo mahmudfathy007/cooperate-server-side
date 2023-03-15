@@ -2582,14 +2582,7 @@ netmask@^2.0.2:
   resolved "https://registry.yarnpkg.com/netmask/-/netmask-2.0.2.tgz#8b01a07644065d536383835823bc52004ebac5e7"
   integrity sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==
 
-nodejs-nodemailer-outlook@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/nodejs-nodemailer-outlook/-/nodejs-nodemailer-outlook-1.2.4.tgz#73aa4c8db74f3049aea889ec313de457443b2ca4"
-  integrity sha512-+AGxGRsMAwsXJNfm46/ELfNaj5tuMeoHV/3dR4C9TyAh54eYz2ZNNMHCICm7B3eTFdVtIHqIUsYNYg1Bju6J6A==
-  dependencies:
-    nodemailer "^6.4.16"
-
-nodemailer@^6.4.16, nodemailer@^6.9.1:
+nodemailer@^6.9.1:
   version "6.9.1"
   resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.9.1.tgz#8249d928a43ed85fec17b13d2870c8f758a126ed"
   integrity sha512-qHw7dOiU5UKNnQpXktdgQ1d3OFgRAekuvbJLcdG5dnEo/GtcTHRYM7+UfJARdOFU9WUQO8OiIamgWPmiSFHYAA==

@@ -11,4 +11,6 @@ const projectRoutes = express.Router();
 // @auth    Client
 projectRoutes.post('/', projectController.createProject);
 
+projectRoutes.get('/:userId', projectController.getProjects);
+
 module.exports = projectRoutes;

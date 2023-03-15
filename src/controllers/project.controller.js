@@ -33,6 +33,19 @@ const createProject = async (req, res) => {
   }
 };
 
+const getProjects = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const projects = await Project.find({
+      $or: [{ client_id: userId }, { freelancer_id: userId }],
+    });
+    return res.status(200).json({ projects });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProject,
+  getProjects,
 };

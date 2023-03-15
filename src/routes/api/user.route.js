@@ -34,6 +34,6 @@ userRoutes.put('/:userId/updateSkills', userController.updateSkills);
 // @auth    Freelancer
 userRoutes.put('/:userId/updateCategories', userController.updateCategory);
 
-userRoutes.post('/profilePic', handleFileUpload(uploadImage), userController.profilePic);
+userRoutes.put('/:userId/profilePic', handleFileUpload(uploadImage), userController.profilePic);
 
 module.exports = userRoutes;

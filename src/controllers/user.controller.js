@@ -110,7 +110,6 @@ const updateUser = async (req, res) => {
     new_email,
     new_address,
     new_phone,
-    new_imageUrl,
     new_CvUrl,
     new_education,
     new_biography,
@@ -143,9 +142,6 @@ const updateUser = async (req, res) => {
     }
     if (isDefinedAndNotEmpty(new_country)) {
       user.country = new_country;
-    }
-    if (isDefinedAndNotEmpty(new_imageUrl)) {
-      user.imageUrl = new_imageUrl;
     }
     if (isDefinedAndNotEmpty(new_education)) {
       user.education = new_education;
@@ -247,9 +243,12 @@ const updateCategory = async (req, res) => {
 };
 
 const profilePic = async (req, res) => {
+  const { userId } = req.params;
   const image = await cloudinary.uploader.upload(req.file.path, {
     folder: 'user',
   });
+  await User.findByIdAndUpdate(userId, { imageUrl: image.secure_url });
+
   console.log(image);
   res.json({ message: 'Done' });
 };
