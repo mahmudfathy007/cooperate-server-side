@@ -43,7 +43,7 @@ const getProjects = async (req, res) => {
       $or: [{ client_id: userId }, { Freelancer_id: userId }],
     })
       .populate({
-        path: 'jobs',
+        path: 'job',
         populate: {
           path: 'category',
           select: 'name',
@@ -51,7 +51,7 @@ const getProjects = async (req, res) => {
         },
       })
       .populate({
-        path: 'jobs',
+        path: 'job',
         populate: {
           path: 'skills',
           select: 'name',
