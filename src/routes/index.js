@@ -11,6 +11,7 @@ const projectRoutes = require('./api/project.route');
 const milestoneRoutes = require('./api/milestone.route');
 const conversationRoutes = require('./api/conversation.route');
 const chatRoutes = require('./api/chat.route');
+const ratingRoutes = require('./api/rating.route');
 
 // Routes
 routes.use('/', authRoutes);
@@ -24,5 +25,6 @@ routes.use('/project', projectRoutes);
 routes.use('/milestone', milestoneRoutes);
 routes.use('/conversation', conversationRoutes);
 routes.use('/chat', chatRoutes);
+routes.use('/rating', ratingRoutes);
 
 module.exports = routes;
