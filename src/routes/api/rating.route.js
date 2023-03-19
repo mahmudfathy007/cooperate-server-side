@@ -7,4 +7,6 @@ const ratingRoutes = express.Router();
 
 ratingRoutes.post('/:userId', ratingController.postRate);
 
+ratingRoutes.get('/:userId', ratingController.getRatings);
+
 module.exports = ratingRoutes;

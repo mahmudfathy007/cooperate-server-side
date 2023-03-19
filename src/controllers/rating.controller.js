@@ -22,12 +22,28 @@ const postRate = async (req, res) => {
     });
 
     await rating.save();
+    Completed.rating.push(rating._id);
+    await Completed.save();
     return res.status(201).json({ rating });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
 };
 
+const getRatings = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const rating = await Rating.find({ rated_user: { $in: userId } });
+    if (rating) {
+      return res.status(200).json(rating);
+    }
+    return res.status(404).json({ message: 'no rating found' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   postRate,
+  getRatings,
 };

@@ -32,6 +32,23 @@ const sendIvitation = async (req, res) => {
   }
 };
 
+const getInvitations = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const invitation = await Invitation.find({ freelancer_id: { $in: userId } }).populate({
+      path: 'job_id',
+      model: Job,
+    });
+    if (invitation) {
+      return res.status(200).json(invitation);
+    }
+    return res.status(404).json({ message: 'no invitation found' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   sendIvitation,
+  getInvitations,
 };

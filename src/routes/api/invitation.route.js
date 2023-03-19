@@ -11,4 +11,6 @@ const invitationRoutes = express.Router();
 // @auth    Freelancer
 invitationRoutes.post('/:userId', invitationController.sendIvitation);
 
+invitationRoutes.get('/:userId', invitationController.getInvitations);
+
 module.exports = invitationRoutes;
