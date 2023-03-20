@@ -7,7 +7,7 @@ module.exports = {
       logger.info('Initializing socket.io');
       io = require('socket.io')(httpServer, {
         cors: {
-          origin: 'http://localhost:3000/',
+          origin: '*',
         },
       });
     } else {
