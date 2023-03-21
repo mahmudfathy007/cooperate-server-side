@@ -2,12 +2,12 @@ const multer = require('multer');
 
 // Set up storage for CVs
 const cvStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'E:/cooperate-server-side/src/uploads/CV');
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
+  // destination: function (req, file, cb) {
+  //   cb(null, 'E:/cooperate-server-side/src/uploads/CV');
+  // },
+  // filename: function (req, file, cb) {
+  //   cb(null, file.originalname);
+  // },
 });
 
 // Set up storage for profile pictures

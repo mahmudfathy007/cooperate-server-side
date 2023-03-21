@@ -245,7 +245,7 @@ const updateCategory = async (req, res) => {
 const profilePic = async (req, res) => {
   const { userId } = req.params;
   const image = await cloudinary.uploader.upload(req.file.path, {
-    folder: 'user',
+    folder: 'user/profilePic',
   });
   await User.findByIdAndUpdate(userId, { imageUrl: image.secure_url });
 
@@ -253,6 +253,16 @@ const profilePic = async (req, res) => {
   res.json({ message: 'Done' });
 };
 
+const cv = async (req, res) => {
+  const { userId } = req.params;
+  const cv = await cloudinary.uploader.upload(req.file.path, {
+    folder: 'user/CV',
+  });
+  await User.findByIdAndUpdate(userId, { CvUrl: cv.secure_url });
+
+  console.log(cv);
+  res.json({ message: 'Done' });
+};
 module.exports = {
   changePassword,
   getUser,
@@ -261,4 +271,5 @@ module.exports = {
   updateSkills,
   updateCategory,
   profilePic,
+  cv,
 };

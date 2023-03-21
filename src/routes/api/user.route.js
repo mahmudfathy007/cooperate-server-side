@@ -2,7 +2,7 @@ const express = require('express');
 const userController = require('../../controllers/user.controller');
 const { authenticate } = require('../../middlewares/authentication');
 const { authorization } = require('../../middlewares/authorization');
-const { handleFileUpload, uploadImage } = require('../../middlewares/multer');
+const { handleFileUpload, uploadImage, uploadCV } = require('../../middlewares/multer');
 
 const userRoutes = express.Router();
 
@@ -35,5 +35,7 @@ userRoutes.put('/:userId/updateSkills', userController.updateSkills);
 userRoutes.put('/:userId/updateCategories', userController.updateCategory);
 
 userRoutes.put('/:userId/profilePic', handleFileUpload(uploadImage), userController.profilePic);
+
+userRoutes.put('/:userId/cv', handleFileUpload(uploadCV), userController.cv);
 
 module.exports = userRoutes;
