@@ -13,4 +13,6 @@ projectRoutes.post('/', projectController.createProject);
 
 projectRoutes.get('/:userId', projectController.getProjects);
 
+projectRoutes.put('/:userId', projectController.markAsComplete);
+
 module.exports = projectRoutes;

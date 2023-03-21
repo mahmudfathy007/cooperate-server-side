@@ -43,7 +43,20 @@ const getRatings = async (req, res) => {
   }
 };
 
+const getAllRatingsForAdmin = async (req, res) => {
+  try {
+    const ratings = await Rating.find();
+    if (ratings) {
+      return res.status(200).json(ratings);
+    }
+    return res.status(404).json({ message: 'no ratings found' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   postRate,
   getRatings,
+  getAllRatingsForAdmin,
 };

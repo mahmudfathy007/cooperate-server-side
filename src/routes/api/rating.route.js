@@ -9,4 +9,6 @@ ratingRoutes.post('/:userId', ratingController.postRate);
 
 ratingRoutes.get('/:userId', ratingController.getRatings);
 
+ratingRoutes.get('/', ratingController.getAllRatingsForAdmin);
+
 module.exports = ratingRoutes;

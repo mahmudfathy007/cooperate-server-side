@@ -68,7 +68,25 @@ const getProjects = async (req, res) => {
   }
 };
 
+const markAsComplete = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { projectId } = req.body;
+    const existingProject = await Project.findById(projectId, { client_id: userId });
+    if (existingProject) {
+      existingProject.project_status = 'Complete';
+      await existingProject.save();
+      return res.status(200).json({ message: 'Project marked as complete' });
+    } else {
+      return res.status(401).json({ message: 'You are not authorized to perform this action' });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProject,
   getProjects,
+  markAsComplete,
 };
