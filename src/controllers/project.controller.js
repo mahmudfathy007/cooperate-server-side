@@ -85,8 +85,19 @@ const markAsComplete = async (req, res) => {
   }
 };
 
+const getProject = async (req, res) => {
+  try {
+    const { userId, projectId } = req.body;
+    const project = await Project.findOne({ _id: projectId, $or: [{ client_id: userId }, { Freelancer_id: userId }] });
+    return res.status(200).json({ project });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createProject,
   getProjects,
   markAsComplete,
+  getProject,
 };
