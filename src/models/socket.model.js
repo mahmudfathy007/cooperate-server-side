@@ -1,20 +1,24 @@
 const mongoose = require('mongoose');
 
-const socketSchema = mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    socketId: {
-      type: String,
-      required: true,
-    },
+const socketSchema = new mongoose.Schema({
+  userId: {
+    type: String,
+    required: true,
+    unique: true,
   },
-  {
-    timestamps: true,
+  socketId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+});
+
+// Add cascading delete for socket records when a socket is disconnected
+socketSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    await Socket.deleteMany({ userId: doc.userId });
   }
-);
+});
 
 const Socket = mongoose.model('Socket', socketSchema);
 

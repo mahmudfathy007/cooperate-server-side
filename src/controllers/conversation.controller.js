@@ -1,5 +1,5 @@
-const User = require('../models/user.model');
 const Conversation = require('../models/conversation.model');
+const Chat = require('../models/chat.model');
 
 const createConversation = async (req, res) => {
   try {
@@ -20,6 +20,9 @@ const getAllConversations = async (req, res) => {
     const { userId } = req.params;
     const conversations = await Conversation.find({
       $or: [{ client_id: userId }, { Freelancer_id: userId }],
+    }).populate({
+      path: 'chat',
+      model: Chat,
     });
     return res.status(201).json({ conversations });
   } catch (error) {
