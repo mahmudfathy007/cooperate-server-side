@@ -198,6 +198,13 @@ const userSchema = mongoose.Schema(
         default: [],
       },
     ],
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Favorite',
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,
