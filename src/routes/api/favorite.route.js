@@ -5,8 +5,10 @@ const favoriteController = require('../../controllers/favorite.controller');
 
 const favoriteRoutes = express.Router();
 
-favoriteRoutes.post('/:userId', favoriteController.addFreelancerToFavorite);
+favoriteRoutes.post('/:userId/addFreelancerToFavorite', favoriteController.addFreelancerToFavorite);
 
-favoriteRoutes.post('/:userId', favoriteController.addJobToFavorite);
+favoriteRoutes.post('/:userId/addJobToFavorite', favoriteController.addJobToFavorite);
+
+favoriteRoutes.delete('/:favoriteId', favoriteController.deleteFavorite);
 
 module.exports = favoriteRoutes;
