@@ -14,6 +14,7 @@ const chatRoutes = require('./api/chat.route');
 const ratingRoutes = require('./api/rating.route');
 const notificationRoutes = require('./api/notification.route');
 const favoriteRoutes = require('./api/favorite.route');
+const adminRoutes = require('./api/admin.route');
 
 // Routes
 routes.use('/', authRoutes);
@@ -30,5 +31,6 @@ routes.use('/chat', chatRoutes);
 routes.use('/rating', ratingRoutes);
 routes.use('/notification', notificationRoutes);
 routes.use('/favorite', favoriteRoutes);
+routes.use('/admin', adminRoutes);
 
 module.exports = routes;
