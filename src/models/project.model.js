@@ -18,6 +18,10 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    projectUrl: {
+      type: String,
+      required: false,
+    },
     project_status: {
       type: String,
       enum: ['In progress', 'Complete'],

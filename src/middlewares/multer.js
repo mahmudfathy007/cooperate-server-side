@@ -10,6 +10,16 @@ const cvStorage = multer.diskStorage({
   // },
 });
 
+// Set up storage for CVs
+const projectStorage = multer.diskStorage({
+  // destination: function (req, file, cb) {
+  //   cb(null, 'E:/cooperate-server-side/src/uploads/CV');
+  // },
+  // filename: function (req, file, cb) {
+  //   cb(null, file.originalname);
+  // },
+});
+
 // Set up storage for profile pictures
 const imageStorage = multer.diskStorage({
   // destination: function (req, file, cb) {
@@ -42,6 +52,14 @@ const uploadImage = multer({
   },
 }).single('image');
 
+// Define Multer upload middleware for projects
+const uploadProject = multer({
+  storage: projectStorage,
+  fileFilter: function (req, file, cb) {
+    cb(null, true);
+  },
+}).single('project');
+
 // Function to handle file uploads with Multer
 function handleFileUpload(middleware) {
   return function (req, res, next) {
@@ -57,4 +75,5 @@ module.exports = {
   handleFileUpload,
   uploadCV,
   uploadImage,
+  uploadProject,
 };

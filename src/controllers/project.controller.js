@@ -95,9 +95,21 @@ const getProject = async (req, res) => {
   }
 };
 
+const uploadProject = async (req, res) => {
+  const { projectId } = req.params;
+  const project = await cloudinary.uploader.upload(req.file.path, {
+    folder: 'user/projects',
+  });
+  await Project.findByIdAndUpdate(projectId, { projectUrl: project.secure_url });
+
+  console.log(project);
+  res.json({ message: 'Done' });
+};
+
 module.exports = {
   createProject,
   getProjects,
   markAsComplete,
   getProject,
+  uploadProject,
 };
