@@ -33,7 +33,11 @@ const postRate = async (req, res) => {
 const getRatings = async (req, res) => {
   const { userId } = req.params;
   try {
-    const rating = await Rating.find({ rated_user: { $in: userId } });
+    const rating = await Rating.find({ rated_user: { $in: userId } }).populate({
+      path: 'rated_user',
+      select: 'first_name last_name',
+      model: User,
+    });
     if (rating) {
       return res.status(200).json(rating);
     }
