@@ -18,6 +18,6 @@ projectRoutes.get('/', projectController.getProject);
 
 projectRoutes.put('/:userId', projectController.markAsComplete);
 
-projectRoutes.put('/:userId/uploadProject', handleFileUpload(uploadProject), projectController.uploadProject);
+projectRoutes.put('/:projectId/uploadProject', handleFileUpload(uploadProject), projectController.uploadProject);
 
 module.exports = projectRoutes;

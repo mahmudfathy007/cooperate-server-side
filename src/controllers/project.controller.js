@@ -5,6 +5,7 @@ const User = require('../models/user.model');
 const Category = require('../models/category.model');
 const Skill = require('../models/skill.model');
 const Milestone = require('../models/milestone.model');
+const { cloudinary } = require('../middlewares/cloudinary');
 
 const createProject = async (req, res) => {
   const { proposal_id } = req.body;
