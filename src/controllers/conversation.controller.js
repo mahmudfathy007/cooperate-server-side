@@ -4,6 +4,10 @@ const Chat = require('../models/chat.model');
 const createConversation = async (req, res) => {
   try {
     const { client_id, Freelancer_id } = req.body;
+    const existingConversation = await Conversation.findOne({ client_id, Freelancer_id });
+    if (existingConversation) {
+      return res.status(404).json({ message: 'you have created this conversation before' });
+    }
     const conversation = await Conversation.create({
       client_id,
       Freelancer_id,
