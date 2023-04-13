@@ -3,8 +3,10 @@ const adminController = require('../../controllers/admin.controller');
 const { authenticate } = require('../../middlewares/authentication');
 const { authorization } = require('../../middlewares/authorization');
 
-const userRoutes = express.Router();
+const adminRoutes = express.Router();
 
-userRoutes.get('/:userId', adminController.adminDashBoard);
+adminRoutes.get('/:userId', adminController.adminDashBoard);
 
-module.exports = userRoutes;
+adminRoutes.delete('/:userId/deleteUser', adminController.deleteUser);
+
+module.exports = adminRoutes;

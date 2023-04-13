@@ -263,6 +263,22 @@ const cv = async (req, res) => {
   console.log(cv);
   res.json({ message: 'Done' });
 };
+
+const deleteAccount = async (req, res) => {
+  const { userId } = req.params;
+  const { password } = req.body;
+  try {
+    const user = await User.findById(userId).exec();
+    if (!(await user.isPasswordMatch(password))) {
+      return res.status(422).json({ message: 'Incorrect old password enter the correct password to delete your account' });
+    }
+    await User.findByIdAndDelete(userId);
+    return res.status(200).json({ message: 'User deleted successfully' });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   changePassword,
   getUser,
@@ -272,4 +288,5 @@ module.exports = {
   updateCategory,
   profilePic,
   cv,
+  deleteAccount,
 };

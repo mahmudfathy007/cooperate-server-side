@@ -1,5 +1,6 @@
 const Rating = require('../models/rating.model');
 const Project = require('../models/project.model');
+const User = require('../models/user.model');
 
 const postRate = async (req, res) => {
   try {
