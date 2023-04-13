@@ -5,8 +5,8 @@ const { authorization } = require('../../middlewares/authorization');
 
 const adminRoutes = express.Router();
 
-adminRoutes.get('/:userId', adminController.adminDashBoard);
+adminRoutes.get('/', adminController.adminDashBoard);
 
-adminRoutes.delete('/:userId/deleteUser', adminController.deleteUser);
+adminRoutes.delete('/deleteUser', adminController.deleteUser);
 
 module.exports = adminRoutes;
