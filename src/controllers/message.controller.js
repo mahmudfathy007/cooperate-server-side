@@ -20,7 +20,7 @@ const getAllMessages = async (req, res) => {
   try {
     const messages = await Message.find({}).populate({
       path: 'sender_id',
-      select: 'first_name last_name',
+      select: 'first_name last_name email',
       model: User,
     });
     return res.status(201).json({ messages });
