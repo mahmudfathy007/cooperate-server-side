@@ -5,6 +5,17 @@ const Socket = require('../models/socket.model');
 
 const adminDashBoard = async (req, res) => {
   try {
+    const [projectCount, jobCount, userCount, activeUsersCount, freelancerCount, clientCount, adminCount] =
+      await Promise.all([
+        Project.countDocuments(),
+        Job.countDocuments(),
+        User.countDocuments(),
+        Socket.countDocuments(),
+        User.countDocuments({ role: 'freelancer' }),
+        User.countDocuments({ role: 'client' }),
+        User.countDocuments({ role: 'admin' }),
+      ]);
+
     const message = { projectCount, jobCount, userCount, activeUsersCount, freelancerCount, clientCount, adminCount };
     res.status(200).json({
       message: message,
