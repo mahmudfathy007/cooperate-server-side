@@ -9,4 +9,6 @@ messageRoutes.post('/:userId', messageController.sendMessage);
 
 messageRoutes.get('/', messageController.getAllMessages);
 
+messageRoutes.put('/:messageId', messageController.changeStatus);
+
 module.exports = messageRoutes;

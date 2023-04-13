@@ -4,8 +4,9 @@ const User = require('../models/user.model');
 const sendMessage = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { message } = req.body;
+    const { message, subject } = req.body;
     const newMessage = new Message({
+      subject: subject,
       sender_id: userId,
       message,
     });
@@ -28,8 +29,18 @@ const getAllMessages = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const changeStatus = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const message = await Message.findByIdAndUpdate(messageId, { status: 'read' });
+    return res.status(201).json({ message });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   sendMessage,
   getAllMessages,
+  changeStatus,
 };

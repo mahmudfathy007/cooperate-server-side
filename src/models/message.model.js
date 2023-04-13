@@ -6,8 +6,18 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'User',
     },
+    subject: {
+      type: String,
+      require: true,
+    },
     message: {
       type: String,
+      require: true,
+    },
+    status: {
+      type: String,
+      enum: ['read', 'unread'],
+      default: 'unread',
     },
   },
   {
