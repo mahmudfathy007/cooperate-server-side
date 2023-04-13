@@ -44,8 +44,34 @@ const changePassword = async (req, res, next) => {
 const getUsers = async (req, res, next) => {
   try {
     // Query the database for all users and exclude the password field from the results
-    const users = await User.find({}).select('-password');
-    // If the operation is successful, send the array of users back in the response body as JSON
+    const users = await User.find({})
+      .select('-password')
+      .populate({
+        path: 'categories',
+        select: 'name',
+        model: Category,
+      })
+      .populate({
+        path: 'skills',
+        select: 'name',
+        model: Skill,
+      })
+      .populate({
+        path: 'jobs',
+        populate: {
+          path: 'category',
+          select: 'name',
+          model: Category,
+        },
+      })
+      .populate({
+        path: 'jobs',
+        populate: {
+          path: 'skills',
+          select: 'name',
+          model: Skill,
+        },
+      }); // If the operation is successful, send the array of users back in the response body as JSON
     return res.status(200).json({ users });
   } catch (error) {
     // If there is an error, send a 500 status code with the error message in the response body as JSON

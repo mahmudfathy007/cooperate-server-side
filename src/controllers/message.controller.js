@@ -17,7 +17,11 @@ const sendMessage = async (req, res) => {
 
 const getAllMessages = async (req, res) => {
   try {
-    const messages = await Message.find({});
+    const messages = await Message.find({}).populate({
+      path: 'sender_id',
+      select: 'first_name last_name',
+      model: User,
+    });
     return res.status(201).json({ messages });
   } catch (error) {
     return res.status(500).json({ message: error.message });
