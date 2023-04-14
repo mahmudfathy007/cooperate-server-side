@@ -22,7 +22,11 @@ const getAllNotifications = async (req, res) => {
     const { userId } = req.params;
     const existingUser = await User.findById(userId);
     if (existingUser) {
-      const notifications = await Notification.find({ target: userId });
+      const notifications = await Notification.find({ target: userId }).populate({
+        path: 'target',
+        select: 'first_name last_name',
+        model: User,
+      });
       return res.status(200).json({ notifications });
     }
     return res.status(404).json({ message: 'User not found' });

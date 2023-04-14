@@ -14,9 +14,21 @@ const postRate = async (req, res) => {
     if (!Completed) {
       return res.status(404).json({ message: 'you cannot rate this user because the project is not completed' });
     }
+    const freelancerId = await User.findOne({
+      $or: [
+        { _id: userId, role: { $eq: 'freelancer' } },
+        { _id: rated_user, role: { $eq: 'freelancer' } },
+      ],
+    });
+    const clientId = await User.findOne({
+      $or: [
+        { _id: userId, role: { $eq: 'client' } },
+        { _id: rated_user, role: { $eq: 'client' } },
+      ],
+    });
     const rating = await Rating.create({
-      user: userId,
-      rated_user,
+      freelancer_Id: freelancerId,
+      client_Id: clientId,
       job_id,
       value,
       feedback,
@@ -34,13 +46,16 @@ const postRate = async (req, res) => {
 const getRatings = async (req, res) => {
   const { userId } = req.params;
   try {
-    const rating = await Rating.find({ rated_user: { $in: userId } }).populate({
-      path: 'rated_user',
+    const ratings = await Rating.find({
+      $or: [{ freelancer_Id: userId }, { client_Id: userId }],
+    }).populate({
+      path: 'freelancer_Id client_Id',
       select: 'first_name last_name',
       model: User,
     });
-    if (rating) {
-      return res.status(200).json(rating);
+    // console.log(ratings);
+    if (ratings.length > 0) {
+      return res.status(200).json(ratings);
     }
     return res.status(404).json({ message: 'no rating found' });
   } catch (error) {

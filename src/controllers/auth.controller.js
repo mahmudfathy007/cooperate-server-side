@@ -82,6 +82,7 @@ const authenticate = async (req, res) => {
     return res.status(200).json({
       accessToken: tokens.access.token,
       refreshToken: tokens.refresh.token,
+      userId: user._id,
     });
   } catch (err) {
     return res.status(500).json({ message: 'an error occurred in authenticating user', error: err });

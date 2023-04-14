@@ -1,6 +1,7 @@
 const Chat = require('../models/chat.model');
 const Conversation = require('../models/conversation.model');
 const Socket = require('../models/socket.model');
+const Notification = require('../models/notification.model');
 const logger = require('../config/logger');
 
 function socketChatMiddleware(io) {
@@ -42,10 +43,7 @@ function socketPersistUserMiddleware(io) {
 
     socket.on('userId', async ({ userId, socketId }) => {
       try {
-        await Socket.create({
-          userId,
-          socketId,
-        });
+        await Socket.findOneAndUpdate({ userId }, { $set: { socketId } }, { upsert: true });
         logger.info(`User connected with userId: ${userId}`);
       } catch (error) {
         // Handle duplicate key error if the record already exists
@@ -67,4 +65,32 @@ function socketPersistUserMiddleware(io) {
     });
   });
 }
-module.exports = { socketChatMiddleware, socketPersistUserMiddleware };
+function socketNotificationMiddleware(io) {
+  io.on('connection', (socket) => {
+    socket.on('new-notification', async ({ user, target, feedback }) => {
+      try {
+        const notification = await Notification.create({
+          user,
+          target,
+          feedback,
+        });
+        await notification.save();
+        const populatedNotification = await Notification.findById(notification._id).populate({
+          path: 'user',
+          select: 'imageUrl first_name last_name',
+        });
+        const socketDoc = await Socket.findOne({ userId: target });
+        // console.log(socketDoc);
+        // console.log(notification);
+        if (socketDoc) {
+          const socketId = socketDoc.socketId; // Extract the socketId from the document
+          // console.log(`Sending Notification to ${socketId}`);
+          io.to(socketId).emit('receive-notification', populatedNotification);
+        }
+      } catch (error) {
+        console.log(`Error sending message: ${error}`);
+      }
+    });
+  });
+}
+module.exports = { socketChatMiddleware, socketPersistUserMiddleware, socketNotificationMiddleware };

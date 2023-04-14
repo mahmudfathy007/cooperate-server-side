@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
-const { socketChatMiddleware, socketPersistUserMiddleware } = require('./middlewares/socket.middleware');
+const {
+  socketChatMiddleware,
+  socketPersistUserMiddleware,
+  socketNotificationMiddleware,
+} = require('./middlewares/socket.middleware');
 
 let server;
 mongoose.set('strictQuery', false);
@@ -16,6 +20,7 @@ mongoose.connect(config.mongoose.url).then(() => {
 
     socketChatMiddleware(io);
     socketPersistUserMiddleware(io);
+    socketNotificationMiddleware(io);
   });
 });
 
