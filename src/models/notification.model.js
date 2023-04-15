@@ -14,6 +14,11 @@ const notificationSchema = new mongoose.Schema(
     },
     feedback: {
       type: String,
+      require: true,
+    },
+    destination: {
+      type: String,
+      require: true,
     },
     read: {
       type: Boolean,

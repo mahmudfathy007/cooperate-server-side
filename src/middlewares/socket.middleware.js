@@ -67,12 +67,13 @@ function socketPersistUserMiddleware(io) {
 }
 function socketNotificationMiddleware(io) {
   io.on('connection', (socket) => {
-    socket.on('new-notification', async ({ user, target, feedback }) => {
+    socket.on('new-notification', async ({ user, target, feedback, destination }) => {
       try {
         const notification = await Notification.create({
           user,
           target,
           feedback,
+          destination,
         });
         await notification.save();
         const populatedNotification = await Notification.findById(notification._id).populate({
