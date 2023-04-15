@@ -16,6 +16,7 @@ const notificationRoutes = require('./api/notification.route');
 const favoriteRoutes = require('./api/favorite.route');
 const adminRoutes = require('./api/admin.route');
 const messageRoutes = require('./api/message.route');
+const reportRoutes = require('./api/report.route');
 
 // Routes
 routes.use('/', authRoutes);
@@ -34,5 +35,6 @@ routes.use('/notification', notificationRoutes);
 routes.use('/favorite', favoriteRoutes);
 routes.use('/admin', adminRoutes);
 routes.use('/message', messageRoutes);
+routes.use('/report', reportRoutes);
 
 module.exports = routes;
