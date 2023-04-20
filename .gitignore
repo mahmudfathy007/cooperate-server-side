@@ -13,4 +13,3 @@ coverage
 
 # Seed
 src/seed/*.json
-src/seed/account.seed.js

@@ -6,6 +6,7 @@ const {
   socketChatMiddleware,
   socketPersistUserMiddleware,
   socketNotificationMiddleware,
+  socketCallMiddleware,
 } = require('./middlewares/socket.middleware');
 
 let server;
@@ -21,6 +22,7 @@ mongoose.connect(config.mongoose.url).then(() => {
     socketChatMiddleware(io);
     socketPersistUserMiddleware(io);
     socketNotificationMiddleware(io);
+    socketCallMiddleware(io);
   });
 });
 

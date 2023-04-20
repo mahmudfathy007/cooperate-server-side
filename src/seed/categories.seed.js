@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
-const config = require('../config/config');
+
 const Category = require('../models/category.model');
 
 const Skill = require('../models/skill.model');
 const data = require('./categories.json');
 
-mongoose.connect(config.mongoose.url, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  'mongodb+srv://MohamedHesham:rypdqPoSNDFVj2Hl@cluster0.sx0zxg0.mongodb.net/MlTest?retryWrites=true&w=majority',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 const db = mongoose.connection;
 
