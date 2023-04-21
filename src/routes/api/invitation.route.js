@@ -9,7 +9,7 @@ const invitationRoutes = express.Router();
 // @desc    send invitation to freelancer
 // @access  Private
 // @auth    Freelancer
-invitationRoutes.post('/:userId', invitationController.sendIvitation);
+invitationRoutes.post('/:userId', invitationController.sendInvitation);
 
 invitationRoutes.get('/:userId', invitationController.getInvitations);
 

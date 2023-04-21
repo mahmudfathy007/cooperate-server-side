@@ -31,10 +31,16 @@ const sendProposal = async (req, res) => {
 const getClientProposals = async (req, res) => {
   const { userId } = req.params;
   try {
-    const proposal = await Proposal.find({ client_id: { $in: userId } }).populate({
-      path: 'job_id',
-      model: Job,
-    });
+    const proposal = await Proposal.find({ client_id: { $in: userId } })
+      .populate({
+        path: 'job_id',
+        model: Job,
+      })
+      .populate({
+        path: 'freelancer_id',
+        select: 'first_name last_name',
+        model: User,
+      });
     if (proposal) {
       return res.status(200).json(proposal);
     }

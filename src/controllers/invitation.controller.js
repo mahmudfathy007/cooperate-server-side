@@ -2,7 +2,7 @@ const User = require('../models/user.model');
 const Job = require('../models/job.model');
 const Invitation = require('../models/invitation.model');
 
-const sendIvitation = async (req, res) => {
+const sendInvitation = async (req, res) => {
   try {
     const { userId } = req.params;
     const { job_id, freelancer_id, invitation_letter } = req.body;
@@ -13,7 +13,7 @@ const sendIvitation = async (req, res) => {
     }
 
     const existingJob = await Job.findById(job_id);
-    console.log('existingJob:', existingJob);
+
     if (!existingJob) {
       return res.status(404).json({ message: ' you cannot send invitation , Job does not exist.' });
     }
@@ -35,10 +35,16 @@ const sendIvitation = async (req, res) => {
 const getInvitations = async (req, res) => {
   const { userId } = req.params;
   try {
-    const invitation = await Invitation.find({ freelancer_id: { $in: userId } }).populate({
-      path: 'job_id',
-      model: Job,
-    });
+    const invitation = await Invitation.find({ freelancer_id: { $in: userId } })
+      .populate({
+        path: 'job_id',
+        model: Job,
+      })
+      .populate({
+        path: 'client_id',
+        select: 'first_name last_name',
+        model: User,
+      });
     if (invitation) {
       return res.status(200).json(invitation);
     }
@@ -49,6 +55,6 @@ const getInvitations = async (req, res) => {
 };
 
 module.exports = {
-  sendIvitation,
+  sendInvitation,
   getInvitations,
 };
