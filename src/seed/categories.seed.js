@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
-
 const Category = require('../models/category.model');
-
 const Skill = require('../models/skill.model');
 const data = require('./categories.json');
 
@@ -26,16 +24,15 @@ db.once('open', async () => {
   // Insert new data
   for (const categoryData of data) {
     const { name, skills } = categoryData;
+    const skillsIds = [];
 
-    const skillsIds = await Promise.all(
-      skills.map(async (skillName) => {
-        let skill = await Skill.findOne({ name: skillName });
-        if (!skill) {
-          skill = await Skill.create({ name: skillName });
-        }
-        return skill._id;
-      })
-    );
+    for (const skillName of skills) {
+      let skill = await Skill.findOne({ name: skillName });
+      if (!skill) {
+        skill = await Skill.create({ name: skillName });
+      }
+      skillsIds.push(skill._id);
+    }
 
     await Category.create({ name, skills: skillsIds });
   }

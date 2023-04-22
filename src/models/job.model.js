@@ -5,7 +5,7 @@ const jobSchema = new mongoose.Schema(
   {
     client_id: {
       type: mongoose.SchemaTypes.ObjectId,
-      required: true,
+      // required: true,
       ref: 'User',
     },
     description: {
@@ -15,12 +15,12 @@ const jobSchema = new mongoose.Schema(
     },
     payment_type: {
       type: String,
-      required: [true, 'Please Choose your payment method'],
+      // required: [true, 'Please Choose your payment method'],
       enum: ['online', 'Fawry', 'paypal'],
     },
     project_length: {
       type: Date,
-      required: true,
+      // required: true,
     },
     category: {
       // required: true,
@@ -37,20 +37,20 @@ const jobSchema = new mongoose.Schema(
 
     experience_level: {
       type: String,
-      required: true,
+      // required: true,
       enum: ['entry', 'intermediate', 'expert'],
     },
     budget: {
       type: Number,
-      required: true,
+      // required: true,
     },
     title: {
       type: String,
-      required: true,
+      // required: true,
     },
     status: {
       type: Boolean,
-      default: false,
+      // default: false,
     },
   },
   {

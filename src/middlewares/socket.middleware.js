@@ -98,30 +98,15 @@ function socketNotificationMiddleware(io) {
 function socketCallMiddleware(io) {
   io.on('connection', (socket) => {
     // Listen for call event from frontend
-    socket.on('call', async ({ signal, receiverId }) => {
+    socket.on('call', async ({ conversation_id, receiverId }) => {
       // Get the socket id of the receiver
       const receiverSocket = await Socket.findOne({ userId: receiverId });
       // console.log('onCall', { signal, receiverId });
       if (receiverSocket) {
         // Emit the call event to the receiver
-        io.to(receiverSocket.socketId).emit('call', { signal: signal });
+        io.to(receiverSocket.socketId).emit('call', { conversation_id });
       } else {
         logger.warn(`Socket not found for user ${receiverId}`);
-      }
-    });
-
-    // Listen for answer event from frontend
-    socket.on('answer', async (data) => {
-      const { receiverId } = data;
-
-      // Get the socket id of the receiver
-      const receiverSocket = await Socket.findOne({ userId: receiverId });
-      // console.log('onAnswer', data);
-      if (receiverSocket) {
-        // Emit the answer event to the receiver
-        io.to(receiverSocket.socketId).emit('answer', { signal: data.signal });
-      } else {
-        console.log(`Socket not found for user ${receiverId}`);
       }
     });
   });
