@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const ratingSchema = new mongoose.Schema(
   {
-    client_Id: {
+    user: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
       ref: 'User',
     },
-    freelancer_Id: {
+    rated_user: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
       ref: 'User',

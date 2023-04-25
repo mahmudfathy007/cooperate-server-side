@@ -14,29 +14,15 @@ const postRate = async (req, res) => {
     if (!Completed) {
       return res.status(404).json({ message: 'you cannot rate this user because the project is not completed' });
     }
-    const freelancerId = await User.findOne({
-      $or: [
-        { _id: userId, role: { $eq: 'freelancer' } },
-        { _id: rated_user, role: { $eq: 'freelancer' } },
-      ],
-    });
-    const clientId = await User.findOne({
-      $or: [
-        { _id: userId, role: { $eq: 'client' } },
-        { _id: rated_user, role: { $eq: 'client' } },
-      ],
-    });
     const rating = await Rating.create({
-      freelancer_Id: freelancerId,
-      client_Id: clientId,
+      user: userId,
+      rated_user,
       job_id,
       value,
       feedback,
     });
 
     await rating.save();
-    Completed.rating.push(rating._id);
-    await Completed.save();
     return res.status(201).json({ rating });
   } catch (err) {
     return res.status(500).json({ message: err.message });
