@@ -5,64 +5,22 @@ const Category = require('../models/category.model');
 const Skill = require('../models/skill.model');
 const Job = require('../models/job.model');
 const Project = require('../models/project.model');
+const Rating = require('../models/rating.model');
+
 mongoose.connect(
   'mongodb+srv://MohamedHesham:rypdqPoSNDFVj2Hl@cluster0.sx0zxg0.mongodb.net/MlTest?retryWrites=true&w=majority',
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-const NUM_FREELANCERS = 100;
-const NUM_CLIENTS = 10;
+const NUM_FREELANCERS = 0;
+const NUM_CLIENTS = 40;
 
 const MIN_SKILLS_PER_CATEGORY = 1;
 const MAX_SKILLS_PER_CATEGORY = 5;
 const MIN_JOBS_PER_CLIENT = 10;
 const MAX_JOBS_PER_CLIENT = 15;
 
-async function createFreelancerAccounts() {
-  try {
-    // get categories and their skills from database
-    const categories = await Category.find().populate({ path: 'skills', model: Skill });
 
-    // create freelancers
-    const freelancers = [];
-    for (let i = 0; i < NUM_FREELANCERS; i++) {
-      const user = await User.create({
-        first_name: faker.name.firstName(),
-        last_name: faker.name.lastName(),
-        username: faker.internet.userName(),
-        email: faker.internet.email(),
-        password: 'test@123',
-        role: 'freelancer',
-        country: faker.address.country(),
-      });
-
-      // add random skills to user
-      const userSkills = [];
-      const selectedCategories = faker.helpers.shuffle(categories).slice(0, 2); // select 2 random categories
-      selectedCategories.forEach((category) => {
-        const categorySkills = category.skills.map((skill) => skill._id);
-
-        const numUserSkills = faker.datatype.number({ min: MIN_SKILLS_PER_CATEGORY, max: MAX_SKILLS_PER_CATEGORY });
-
-        for (let k = 0; k < numUserSkills; k++) {
-          const skill = faker.helpers.arrayElement(categorySkills);
-          if (!userSkills.includes(skill)) {
-            userSkills.push(skill);
-          }
-        }
-      });
-
-      user.categories = [...selectedCategories.map((category) => category._id)];
-      user.skills = userSkills;
-      await user.save();
-      freelancers.push(user);
-    }
-
-    console.log(`${NUM_FREELANCERS} freelancer accounts were created successfully!`);
-  } catch (error) {
-    console.error(error);
-  }
-}
 async function ShowResult() {
   const createdFreelancers = await User.find({ role: 'freelancer' })
     .populate({ path: 'skills', model: Skill })
@@ -85,9 +43,8 @@ async function ShowResult() {
   }
 }
 // ShowResult();
-// createFreelancerAccounts();
 
-async function createClientsAccount() {
+async function createClientsAndFreelancersAccounts() {
   try {
     const categories = await Category.find().populate({ path: 'skills', model: Skill });
 
@@ -234,8 +191,16 @@ async function assignJobsToFreelancers() {
         Freelancer_id: freelancer._id,
         project_status: 'Complete',
       });
-      
 
+      const rating = await Rating.create({
+        user: freelancer._id,
+        rated_user: selectedJob.client_id._id,
+        value: faker.datatype.number({ min: 1, max: 5 }),
+        job_id: selectedJob._id,
+      });
+
+      project.rating = rating._id;
+      await project.save();
       projectData.push(project);
     }
 
@@ -266,45 +231,34 @@ async function Showfinalres() {
 }
 
 async function showMatchingFreelancers() {
-  const jobs = await Job.find({}).populate({ path: 'skills', model: Skill }).populate({ path: 'category', model: Category });
+  const projects = await Project.find()
+    .populate({
+      path: 'job',
+      model: Job,
+      populate: { path: 'skills', model: Skill },
+    })
+    .populate({
+      path: 'Freelancer_id',
+      model: User,
+      populate: { path: 'skills', model: Skill },
+    });
 
-  for (const job of jobs) {
-    console.log(`Job title: ${job.title}`);
-    console.log('Matching job skills:');
-    for (const skill of job.skills) {
+  for (const project of projects) {
+    console.log(`Project title: ${project.job.title}`);
+    console.log('Project Skills:');
+    for (const skill of project.job.skills) {
       console.log(`- ${skill.name}`);
     }
-
-    const matchingFreelancers = await User.find({ role: 'freelancer' })
-      .populate({ path: 'skills', model: Skill })
-      .populate({ path: 'categories', model: Category })
-      .find({
-        $and: [
-          { skills: { $in: job.skills.map((skill) => skill._id) } },
-          { categories: job.category._id },
-        ],
-      });
-
-    console.log('Matching freelancers:');
-
-    for (const freelancer of matchingFreelancers) {
-      console.log(`- ${freelancer.first_name}:`);
-
-      console.log('  Freelancer skills:');
-      for (const skill of freelancer.skills) {
-        if (job.skills.some((jobSkill) => jobSkill._id.equals(skill._id))) {
-          console.log(`  - ${skill.name}`);
-        }
-      }
-
-      console.log('-------------------');
+    console.log('-----------------------------');
+    console.log('Freelancer:');
+    console.log(`- ${project.Freelancer_id.first_name} ${project.Freelancer_id.last_name}`);
+    for (const skill of project.Freelancer_id.skills) {
+      console.log(`- ${skill.name}`);
     }
+    console.log('-----------------------------');
   }
 }
 
 
-
-// createClientsAccount();
-// assignJobsToFreelancers();
-// Showfinalres();
-showMatchingFreelancers();
+// createClientsAndFreelancersAccounts();
+assignJobsToFreelancers();
