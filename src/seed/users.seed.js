@@ -20,7 +20,6 @@ const MAX_SKILLS_PER_CATEGORY = 5;
 const MIN_JOBS_PER_CLIENT = 10;
 const MAX_JOBS_PER_CLIENT = 15;
 
-
 async function ShowResult() {
   const createdFreelancers = await User.find({ role: 'freelancer' })
     .populate({ path: 'skills', model: Skill })
@@ -258,7 +257,6 @@ async function showMatchingFreelancers() {
     console.log('-----------------------------');
   }
 }
-
 
 // createClientsAndFreelancersAccounts();
 assignJobsToFreelancers();

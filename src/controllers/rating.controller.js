@@ -32,14 +32,15 @@ const postRate = async (req, res) => {
 const getRatings = async (req, res) => {
   const { userId } = req.params;
   try {
+    console.log(userId);
     const ratings = await Rating.find({
-      $or: [{ freelancer_Id: userId }, { client_Id: userId }],
+      rated_user: userId,
     }).populate({
-      path: 'freelancer_Id client_Id',
+      path: 'rated_user user',
       select: 'first_name last_name',
       model: User,
     });
-    // console.log(ratings);
+    console.log(ratings);
     if (ratings.length > 0) {
       return res.status(200).json(ratings);
     }
