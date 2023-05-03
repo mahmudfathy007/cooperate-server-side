@@ -9,9 +9,16 @@ const getRecommendations = async (req, res) => {
     if (freelancerExist) {
       //   console.log(freelancerExist);
       const response = await axios.get('http://localhost:2000/recommend', {
-        Freelancer_id: freelancerId,
+        data: {
+          Freelancer_id: freelancerId,
+        },
       });
-      console.log(response.data);
+
+      if (response.data) {
+        const { recommendations } = response.data;
+        // console.log(recommendations);
+        return res.status(200).json({ recommendations });
+      }
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
