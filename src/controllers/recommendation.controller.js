@@ -1,13 +1,14 @@
 const axios = require('axios');
 const User = require('../models/user.model');
+const Jobs = require('../models/job.model');
+const Category = require('../models/category.model');
+const Skill = require('../models/skill.model');
 
 const getRecommendations = async (req, res) => {
   try {
     const { freelancerId } = req.params;
-    // console.log(freelancerId);
     const freelancerExist = await User.findOne({ _id: freelancerId });
     if (freelancerExist) {
-      //   console.log(freelancerExist);
       const response = await axios.get('http://localhost:2000/recommend', {
         data: {
           Freelancer_id: freelancerId,
@@ -16,8 +17,23 @@ const getRecommendations = async (req, res) => {
 
       if (response.data) {
         const { recommendations } = response.data;
-        // console.log(recommendations);
-        return res.status(200).json({ recommendations });
+        const jobArrays = await Promise.all(
+          recommendations.map((jobIds) =>
+            Jobs.find({ _id: { $in: jobIds } })
+              .populate({
+                path: 'skills',
+                select: 'name',
+                model: Skill,
+              })
+              .populate({
+                path: 'category',
+                select: 'name',
+                model: Category,
+              })
+          )
+        );
+        const jobs = jobArrays.flat();
+        return res.status(200).json({ jobs });
       }
     }
   } catch (error) {
