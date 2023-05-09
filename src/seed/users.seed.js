@@ -8,12 +8,12 @@ const Project = require('../models/project.model');
 const Rating = require('../models/rating.model');
 
 mongoose.connect(
-  'mongodb+srv://MohamedHesham:rypdqPoSNDFVj2Hl@cluster0.sx0zxg0.mongodb.net/MlTest?retryWrites=true&w=majority',
+  'mongodb+srv://MohamedHesham:rypdqPoSNDFVj2Hl@cluster0.sx0zxg0.mongodb.net/cooperate?retryWrites=true&w=majority',
   { useNewUrlParser: true, useUnifiedTopology: true }
 );
 
-const NUM_FREELANCERS = 0;
-const NUM_CLIENTS = 40;
+const NUM_FREELANCERS = 40;
+const NUM_CLIENTS = 160;
 
 const MIN_SKILLS_PER_CATEGORY = 1;
 const MAX_SKILLS_PER_CATEGORY = 5;
@@ -198,7 +198,6 @@ async function assignJobsToFreelancers() {
         job_id: selectedJob._id,
       });
 
-      project.rating = rating._id;
       await project.save();
       projectData.push(project);
     }

@@ -4,7 +4,7 @@ const Skill = require('../models/skill.model');
 const data = require('./categories.json');
 
 mongoose.connect(
-  'mongodb+srv://MohamedHesham:rypdqPoSNDFVj2Hl@cluster0.sx0zxg0.mongodb.net/MlTest?retryWrites=true&w=majority',
+  'mongodb+srv://MohamedHesham:rypdqPoSNDFVj2Hl@cluster0.sx0zxg0.mongodb.net/cooperate?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -29,12 +29,24 @@ db.once('open', async () => {
     for (const skillName of skills) {
       let skill = await Skill.findOne({ name: skillName });
       if (!skill) {
+        // Create the skill if it doesn't exist in the database
         skill = await Skill.create({ name: skillName });
+        skillsIds.push(skill._id);
       }
-      skillsIds.push(skill._id);
     }
 
-    await Category.create({ name, skills: skillsIds });
+    // Check if the category already exists in the database
+    let category = await Category.findOne({ name });
+
+    if (!category) {
+      // Create the category if it doesn't exist in the database
+      category = await Category.create({ name, skills: skillsIds });
+    } else {
+      // Push any new skills to the category's skills array
+      const newSkills = skillsIds.filter((skillId) => !category.skills.includes(skillId));
+      category.skills.push(...newSkills);
+      await category.save();
+    }
   }
 
   //console.log('Data seeded');
