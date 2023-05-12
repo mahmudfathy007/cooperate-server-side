@@ -37,10 +37,9 @@ const getRatings = async (req, res) => {
       rated_user: userId,
     }).populate({
       path: 'rated_user user',
-      select: 'first_name last_name',
+      select: 'first_name last_name imageUrl',
       model: User,
     });
-    console.log(ratings);
     if (ratings.length > 0) {
       return res.status(200).json(ratings);
     }
@@ -52,9 +51,13 @@ const getRatings = async (req, res) => {
 
 const getAllRatingsForAdmin = async (req, res) => {
   try {
-    const ratings = await Rating.find();
+    const ratings = await Rating.find().populate({
+      path: 'rated_user user',
+      select: 'first_name last_name imageUrl',
+      model: User,
+    });
     if (ratings) {
-      return res.status(200).json(ratings);
+      return res.status(200).json({ ratings });
     }
     return res.status(404).json({ message: 'no ratings found' });
   } catch (error) {

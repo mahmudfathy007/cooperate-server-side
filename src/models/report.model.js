@@ -12,10 +12,10 @@ const reportSchema = new mongoose.Schema(
       required: true,
       ref: 'User',
     },
-    job_id: {
+    projectId: {
       type: mongoose.SchemaTypes.ObjectId,
       required: true,
-      ref: 'Job',
+      ref: 'Project',
     },
     feedback: {
       type: String,

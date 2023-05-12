@@ -13,7 +13,7 @@ async function seed() {
   const user = new User({
     first_name: 'Mohamed',
     last_name: 'Hesham',
-    email: 'test@nioh.com',
+    email: 'admin@test.com',
     username: 'raidenshurikens1236',
     password: 'test@123',
     isEmailVerified: true,
@@ -21,18 +21,11 @@ async function seed() {
     phone: '+1 555-555-5555',
     gender: 'M',
     birthDate: new Date('2000-06-22'),
-    imageUrl: 'https://example.com/profile.jpg',
     country: 'USA',
-    role: 'client',
-    CvUrl: 'https://example.com/cv.pdf',
-    language: [
-      {
-        language: 'English',
-        level: 'fluent',
-      },
-    ],
+    role: 'admin',
+
     education: 'Bachelor of Computer Science',
-    company_name: 'Nioh.inc',
+
   });
   await user.save();
 

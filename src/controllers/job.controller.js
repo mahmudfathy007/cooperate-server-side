@@ -43,6 +43,11 @@ const postJob = async (req, res) => {
 };
 const getJobs = async (req, res, next) => {
   try {
+    const { per_page = 50, page = 1, lastId } = req.query;
+
+    const skip = lastId ? { _id: { $lt: lastId } } : {};
+    const limit = parseInt(per_page);
+
     // Query the database for all Categories
     const jobs = await Job.find({ status: false })
       .populate({
@@ -54,7 +59,10 @@ const getJobs = async (req, res, next) => {
         path: 'category',
         select: 'name',
         model: Category,
-      });
+      })
+      .sort({ createdAt: -1 }) // sort by createdAt field in descending order
+      .skip((page - 1) * limit)
+      .limit(limit);
     // If the operation is successful, send the array of Categories back in the response body as JSON
     return res.status(200).json({ jobs });
   } catch (error) {
