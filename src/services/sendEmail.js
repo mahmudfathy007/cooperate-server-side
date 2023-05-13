@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-const sendEmail = (dest , tokens) => {
+const sendEmail = (dest, tokens) => {
   const transporter = nodemailer.createTransport({
     service: 'hotmail',
     auth: {
@@ -263,7 +263,7 @@ const sendEmail = (dest , tokens) => {
             </div>
           </center>
         </body>
-      </html>`
+      </html>`,
   };
 
   transporter.sendMail(options, (error, info) => {

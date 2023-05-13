@@ -25,7 +25,6 @@ async function seed() {
     role: 'admin',
 
     education: 'Bachelor of Computer Science',
-
   });
   await user.save();
 

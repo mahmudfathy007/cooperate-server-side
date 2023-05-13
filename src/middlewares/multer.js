@@ -1,17 +1,13 @@
 const multer = require('multer');
 
 // Set up storage for CVs
-const cvStorage = multer.diskStorage({
-
-});
+const cvStorage = multer.diskStorage({});
 
 // Set up storage for CVs
-const projectStorage = multer.diskStorage({
-});
+const projectStorage = multer.diskStorage({});
 
 // Set up storage for profile pictures
-const imageStorage = multer.diskStorage({
-});
+const imageStorage = multer.diskStorage({});
 
 // Define Multer upload middleware for CVs
 const uploadCV = multer({

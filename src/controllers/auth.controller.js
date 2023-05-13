@@ -40,7 +40,7 @@ const register = async (req, res, next) => {
       country,
     });
     const tokens = await generateAuthTokens(user);
-    sendEmail(email , tokens.access.token )
+    sendEmail(email, tokens.access.token);
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {
     console.log(err);
@@ -63,7 +63,6 @@ const confrimEmail = async (req, res) => {
     return res.status(500).json({ message: 'An error occurred while verifying email.', error: err });
   }
 };
-
 
 const authenticate = async (req, res) => {
   const body = { body: req.body };
