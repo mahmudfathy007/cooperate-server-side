@@ -7,6 +7,17 @@ const sendInvitation = async (req, res) => {
     const { userId } = req.params;
     const { job_id, freelancer_id, invitation_letter } = req.body;
 
+    const existingClient = await User.findById(userId);
+    if (!existingClient) {
+      return res.status(404).json({ message: 'Client does not exist.' });
+    }
+    const existingFreelancer = await User.findById(freelancer_id);
+    if (!existingFreelancer) {
+      return res.status(404).json({ message: 'Freelancer does not exist.' });
+    }
+    // if(existingClient.isEmailVerified === false){
+    //   return res.status(404).json({ message: 'Client is not verified.' });
+    // }
     const existingInvitation = await Invitation.findOne({ job_id, freelancer_id });
     if (existingInvitation) {
       return res.status(404).json({ message: 'you have sent Invitation for this Freelancer about this job before' });

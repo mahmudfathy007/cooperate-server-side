@@ -1,11 +1,11 @@
 const Token = require('../models/token.model');
+const config = require('../config/config');
+const jwt = require('jsonwebtoken');
 const sendEmail = require('../services/sendEmail');
 const User = require('../models/user.model');
 const { generateAuthTokens, verifyToken, generateAccessToken } = require('../utils/Token');
-const bcrypt = require('bcryptjs');
 const { registerSchema, authenticateSchema, logoutSchema, refreshTokenSchema } = require('../utils/Validation');
 const Joi = require('joi');
-const { jwt } = require('../config/config');
 
 const register = async (req, res, next) => {
   const body = { body: req.body };
@@ -39,9 +39,8 @@ const register = async (req, res, next) => {
       email,
       country,
     });
-    // let token = jwt.sign({id:user._id} , process.env.jwt_secret)
-    let message = `<a href=".">Please Click Here To Verify Your Email</a>`;
-    sendEmail(email, message);
+    const tokens = await generateAuthTokens(user);
+    sendEmail(email , tokens.access.token )
     return res.status(200).json({ message: 'User created successfully', user });
   } catch (err) {
     console.log(err);
@@ -49,10 +48,22 @@ const register = async (req, res, next) => {
   }
 };
 
-const confrimEmail = (req, res) => {
-  let { token } = req.params;
-  res.json({ message: 'Helloo' });
+const confrimEmail = async (req, res) => {
+  const { token } = req.params;
+  try {
+    // Verify token
+    const verifiedToken = jwt.verify(token, config.jwt.secret);
+    const userId = verifiedToken.sub;
+
+    // Update emailVerified field
+    await User.findByIdAndUpdate(userId, { isEmailVerified: true });
+
+    return res.status(200).json({ message: 'Email verified successfully.' });
+  } catch (err) {
+    return res.status(500).json({ message: 'An error occurred while verifying email.', error: err });
+  }
 };
+
 
 const authenticate = async (req, res) => {
   const body = { body: req.body };

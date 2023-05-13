@@ -19,6 +19,15 @@ const postJob = async (req, res) => {
     );
 
     const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'No user found.' });
+    }
+    if(user.role !== 'client') {
+      return res.status(401).json({ message: 'Only clients can post jobs.' });
+    }
+    // if(user.isEmailVerified === false) {
+    //   return res.status(401).json({ message: 'Please verify your email first.' });
+    // }
     const category = await Category.findOne({ name: category_name });
     if (!category) {
       return res.status(404).json({ message: 'No category found.' });
