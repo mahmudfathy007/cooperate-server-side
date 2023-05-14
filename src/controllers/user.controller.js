@@ -142,7 +142,6 @@ const updateUser = async (req, res) => {
     new_company_name,
     new_country,
     language,
-    phone,
   } = req.body;
 
   const { userId } = req.params;
@@ -172,9 +171,6 @@ const updateUser = async (req, res) => {
     }
     if (isDefinedAndNotEmpty(new_education)) {
       user.education = new_education;
-    }
-    if (isDefinedAndNotEmpty(phone)) {
-      user.phone = phone;
     }
 
     // Handle language field
