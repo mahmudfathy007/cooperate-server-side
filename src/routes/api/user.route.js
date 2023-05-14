@@ -40,4 +40,6 @@ userRoutes.put('/:userId/cv', handleFileUpload(uploadCV), userController.cv);
 
 userRoutes.delete('/:userId/deleteAccount', userController.deleteAccount);
 
+userRoutes.put('/:userId/createID', handleFileUpload(uploadImage), userController.createID);
+
 module.exports = userRoutes;

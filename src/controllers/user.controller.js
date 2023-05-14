@@ -6,6 +6,7 @@ const Category = require('../models/category.model');
 const Skill = require('../models/skill.model');
 const Job = require('../models/job.model');
 const { cloudinary } = require('../middlewares/cloudinary');
+const fs = require('fs');
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -305,6 +306,20 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const createID = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const imageData = fs.readFileSync(req.file.path);
+    const updatedUser = await User.findByIdAndUpdate(userId, { IDimage: imageData });
+    await updatedUser.save();
+    fs.unlinkSync(req.file.path);
+    res.status(200).json({ message: 'New image saved to database' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to save image to database' });
+  }
+};
+
 module.exports = {
   changePassword,
   getUser,
@@ -315,4 +330,5 @@ module.exports = {
   profilePic,
   cv,
   deleteAccount,
+  createID,
 };

@@ -205,6 +205,9 @@ const userSchema = mongoose.Schema(
         default: [],
       },
     ],
+    IDimage: {
+      type: Buffer,
+    },
   },
   {
     timestamps: true,
