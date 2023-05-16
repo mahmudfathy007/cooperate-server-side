@@ -7,6 +7,7 @@ const Skill = require('../models/skill.model');
 const Job = require('../models/job.model');
 const { cloudinary } = require('../middlewares/cloudinary');
 const fs = require('fs');
+const Project = require('../models/project.model');
 
 const changePassword = async (req, res, next) => {
   const body = { body: req.body };
@@ -320,6 +321,40 @@ const createID = async (req, res) => {
   }
 };
 
+const addPersonalProject = async (req, res) => {
+  const { userId } = req.params;
+  const { title, url } = req.body;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    if (user.role !== 'freelancer') {
+      return res.status(401).json({ message: 'You are not authorized to perform this action' });
+    }
+
+    const project = { title, url };
+    user.personal_projects.push(project);
+    await user.save();
+    return res.status(201).json({ project });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getWorkHistory = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const projects = await Project.find({
+      $or: [{ client_id: userId }, { Freelancer_id: userId }],
+      project_status: 'Complete',
+    });
+    return res.status(200).json({ projects });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   changePassword,
   getUser,
@@ -331,4 +366,6 @@ module.exports = {
   cv,
   deleteAccount,
   createID,
+  addPersonalProject,
+  getWorkHistory,
 };
