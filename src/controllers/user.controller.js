@@ -144,34 +144,36 @@ const updateUser = async (req, res) => {
     new_company_name,
     new_country,
     language,
+    new_gender,
+    new_birthDate,
   } = req.body;
-
+  console.log(req.body);
   const { userId } = req.params;
 
   try {
     const user = await User.findById(userId).exec();
 
-    if (isDefinedAndNotEmpty(new_first_name)) {
+    if (isDefinedAndNotEmpty(new_first_name) && user.first_name !== new_first_name) {
       user.first_name = new_first_name;
     }
-    if (isDefinedAndNotEmpty(new_last_name)) {
+    if (isDefinedAndNotEmpty(new_last_name) && user.last_name !== new_last_name) {
       user.last_name = new_last_name;
     }
-    if (isDefinedAndNotEmpty(new_email)) {
+    if (isDefinedAndNotEmpty(new_email) && user.email !== new_email) {
       user.new_email = new_email;
-      let message = `<a href=".">Please Click Here To Update Your Email</a>`;
-      sendEmail(new_email, message);
+      // let message = `<a href=".">Please Click Here To Update Your Email</a>`;
+      // sendEmail(new_email, message);
     }
-    if (isDefinedAndNotEmpty(new_address)) {
+    if (isDefinedAndNotEmpty(new_address) && user.address !== new_address) {
       user.address = new_address;
     }
-    if (isDefinedAndNotEmpty(new_phone)) {
+    if (isDefinedAndNotEmpty(new_phone) && user.phone !== new_phone) {
       user.phone = new_phone;
     }
-    if (isDefinedAndNotEmpty(new_country)) {
+    if (isDefinedAndNotEmpty(new_country) && user.country !== new_country) {
       user.country = new_country;
     }
-    if (isDefinedAndNotEmpty(new_education)) {
+    if (isDefinedAndNotEmpty(new_education) && user.education !== new_education) {
       user.education = new_education;
     }
 
@@ -191,15 +193,33 @@ const updateUser = async (req, res) => {
         }
       }
     }
-    if (isDefinedAndNotEmpty(new_CvUrl) && user.role === 'freelancer') {
+    if (isDefinedAndNotEmpty(new_CvUrl) && user.role === 'freelancer' && user.Cv !== new_CvUrl) {
       user.CvUrl = new_CvUrl;
     }
-    if (isDefinedAndNotEmpty(new_biography) && user.role === 'freelancer') {
+    if (isDefinedAndNotEmpty(new_biography) && user.role === 'freelancer' && user.biography !== new_biography) {
       user.biography = new_biography;
     }
-    if (isDefinedAndNotEmpty(new_company_name) && user.role === 'client') {
+    if (isDefinedAndNotEmpty(new_company_name) && user.role === 'client' && user.company_name !== new_company_name) {
       user.company_name = new_company_name;
     }
+    if (isDefinedAndNotEmpty(new_gender) && user.gender !== new_gender) {
+      user.gender = new_gender;
+    }
+    if (isDefinedAndNotEmpty(new_birthDate) && user.birthDate !== new_birthDate) {
+      const dateParts = new_birthDate.split('-');
+      const year = parseInt(dateParts[0]);
+      const month = parseInt(dateParts[1]) - 1;
+      const day = parseInt(dateParts[2]);
+
+      const formattedBirthDate = new Date();
+      formattedBirthDate.setUTCFullYear(year);
+      formattedBirthDate.setUTCMonth(month);
+      formattedBirthDate.setUTCDate(day);
+      formattedBirthDate.setUTCHours(0, 0, 0, 0);
+
+      user.birthDate = formattedBirthDate;
+    }
+
     await user.save();
     return res.status(200).json({ message: 'User updated successfully' });
   } catch (err) {
@@ -298,7 +318,7 @@ const deleteAccount = async (req, res) => {
   try {
     const user = await User.findById(userId).exec();
     if (!(await user.isPasswordMatch(password))) {
-      return res.status(422).json({ message: 'Incorrect old password enter the correct password to delete your account' });
+      return res.status(422).json({ message: 'Incorrect password enter the correct password to delete your account' });
     }
     await User.findByIdAndDelete(userId);
     return res.status(200).json({ message: 'User deleted successfully' });
@@ -341,6 +361,31 @@ const addPersonalProject = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const removePersonalProject = async (req, res) => {
+  const { userId } = req.params;
+  const { title } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    if (user.role !== 'freelancer') {
+      return res.status(401).json({ message: 'You are not authorized to perform this action' });
+    }
+
+    const projectIndex = user.personal_projects.findIndex((project) => project.title === title);
+    if (projectIndex === -1) {
+      return res.status(404).json({ message: 'Personal project not found' });
+    }
+
+    user.personal_projects.splice(projectIndex, 1);
+    await user.save();
+    return res.status(200).json({ message: 'Personal project removed successfully' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
 
 const getWorkHistory = async (req, res) => {
   try {
@@ -348,6 +393,19 @@ const getWorkHistory = async (req, res) => {
     const projects = await Project.find({
       $or: [{ client_id: userId }, { Freelancer_id: userId }],
       project_status: 'Complete',
+    }).populate({
+      path: 'job',
+      model: Job,
+      populate: [
+        {
+          path: 'skills',
+          model: Skill,
+        },
+        {
+          path: 'category',
+          model: Category,
+        },
+      ],
     });
     return res.status(200).json({ projects });
   } catch (error) {
@@ -368,4 +426,5 @@ module.exports = {
   createID,
   addPersonalProject,
   getWorkHistory,
+  removePersonalProject,
 };

@@ -42,7 +42,9 @@ userRoutes.delete('/:userId/deleteAccount', userController.deleteAccount);
 
 userRoutes.put('/:userId/createID', handleFileUpload(uploadImage), userController.createID);
 
-userRoutes.put('/:userId/addPersonalProject', userController.addPersonalProject);
+userRoutes.put('/:userId/personalProjects', userController.addPersonalProject);
+
+userRoutes.delete('/:userId/personalProjects', userController.removePersonalProject);
 
 userRoutes.get('/:userId/getWorkHistory', userController.getWorkHistory);
 
