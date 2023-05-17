@@ -33,12 +33,6 @@ const projectSchema = new mongoose.Schema(
         ref: 'Milestone',
       },
     ],
-    rating: [
-      {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Rating',
-      },
-    ],
   },
   {
     timestamps: true,
