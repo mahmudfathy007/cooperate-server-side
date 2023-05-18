@@ -208,6 +208,10 @@ const userSchema = mongoose.Schema(
     IDimage: {
       type: Buffer,
     },
+    isIDVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
