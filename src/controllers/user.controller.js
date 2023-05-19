@@ -81,6 +81,20 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+const getFreelancers = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (user.role === 'client') {
+      const users = await User.find({ role: 'freelancer' });
+      return res.status(200).json({ users });
+    }
+    return res.status(401).json({ message: 'Unauthorized' });
+  } catch (error) {
+    // If there is an error, send a 500 status code with the error message in the response body as JSON
+    return res.status(500).json({ message: error.message });
+  }
+};
 const getUser = async (req, res, next) => {
   // Destructure userId from request body
   const { userId } = req.params;
@@ -427,4 +441,5 @@ module.exports = {
   addPersonalProject,
   getWorkHistory,
   removePersonalProject,
+  getFreelancers,
 };

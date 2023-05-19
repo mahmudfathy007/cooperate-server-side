@@ -52,6 +52,11 @@ const jobSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    Payment_Info: {
+      card_number: String,
+      CVV: String,
+      name_on_card: String,
+    },
   },
   {
     timestamps: true,
