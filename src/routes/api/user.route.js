@@ -48,6 +48,4 @@ userRoutes.delete('/:userId/personalProjects', userController.removePersonalProj
 
 userRoutes.get('/:userId/getWorkHistory', userController.getWorkHistory);
 
-userRoutes.get('/:userId/getFreelancers', userController.getFreelancers);
-
 module.exports = userRoutes;

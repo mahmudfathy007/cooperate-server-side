@@ -18,6 +18,7 @@ const adminRoutes = require('./api/admin.route');
 const messageRoutes = require('./api/message.route');
 const reportRoutes = require('./api/report.route');
 const machineRoutes = require('./api/machine.route');
+const freelancerRoutes = require('./api/freelancer.route');
 
 // Routes
 routes.use('/', authRoutes);
@@ -38,5 +39,6 @@ routes.use('/admin', adminRoutes);
 routes.use('/message', messageRoutes);
 routes.use('/report', reportRoutes);
 routes.use('/machine', machineRoutes);
+routes.use('/freelancer', freelancerRoutes);
 
 module.exports = routes;
