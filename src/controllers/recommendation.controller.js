@@ -19,7 +19,7 @@ const getRecommendations = async (req, res) => {
         const { recommendations } = response.data;
         const jobArrays = await Promise.all(
           recommendations.map((jobIds) =>
-            Jobs.find({ _id: { $in: jobIds }, status: false })
+            Jobs.find({ _id: { $in: jobIds }})
               .populate({
                 path: 'skills',
                 select: 'name',
