@@ -5,10 +5,23 @@ const ratingController = require('../../controllers/rating.controller');
 
 const ratingRoutes = express.Router();
 
-ratingRoutes.post('/:userId', ratingController.postRate);
+// Post Rating route
+// @route   POST api/rating/:userId
+// @desc    Post a rating for a user
+// @access  Private
+ratingRoutes.post('/:userId', authenticate, ratingController.postRate);
 
-ratingRoutes.get('/:userId', ratingController.getRatings);
+// Get Ratings for a User route
+// @route   GET api/rating/:userId
+// @desc    Get ratings for a user
+// @access  Public
+ratingRoutes.get('/:userId', authenticate, ratingController.getRatings);
 
-ratingRoutes.get('/', ratingController.getAllRatingsForAdmin);
+// Get All Ratings for Admin route
+// @route   GET api/rating
+// @desc    Get all ratings for admin
+// @access  Private
+// @auth    Admin
+ratingRoutes.get('/', authenticate, authorization('admin'), ratingController.getAllRatingsForAdmin);
 
 module.exports = ratingRoutes;

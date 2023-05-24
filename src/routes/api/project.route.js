@@ -6,18 +6,41 @@ const { handleFileUpload, uploadProject } = require('../../middlewares/multer');
 
 const projectRoutes = express.Router();
 
+// Create Project route
 // @route   POST api/project
-// @desc    accept a proposal and turn it into a project
+// @desc    Accept a proposal and turn it into a project
 // @access  Private
 // @auth    Client
-projectRoutes.post('/', projectController.createProject);
+projectRoutes.post('/', authenticate, authorization('Client'), projectController.createProject);
 
+// Get User Projects route
+// @route   GET api/project/:userId
+// @desc    Get projects for a user
+// @access  Public
 projectRoutes.get('/:userId', projectController.getProjects);
 
+// Get Project route
+// @route   GET api/project
+// @desc    Get a project
+// @access  Public
 projectRoutes.get('/', projectController.getProject);
 
-projectRoutes.put('/:userId', projectController.markAsComplete);
+// Mark Project as Complete route
+// @route   PUT api/project/:userId
+// @desc    Mark a project as complete
+// @access  Private
+projectRoutes.put('/:userId', authenticate, authorization('Client'), projectController.markAsComplete);
 
-projectRoutes.put('/:projectId/uploadProject', handleFileUpload(uploadProject), projectController.uploadProject);
+// Upload Project route
+// @route   PUT api/project/:projectId/uploadProject
+// @desc    Upload a project file
+// @access  Private
+projectRoutes.put(
+  '/:projectId/uploadProject',
+  authenticate,
+  authorization('freelancer'),
+  handleFileUpload(uploadProject),
+  projectController.uploadProject
+);
 
 module.exports = projectRoutes;

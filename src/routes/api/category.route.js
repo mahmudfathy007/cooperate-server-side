@@ -5,15 +5,16 @@ const categoryController = require('../../controllers/category.controller');
 
 const categoryRoutes = express.Router();
 
+// Add Category route
 // @route   POST api/category
-// @desc    add Category
+// @desc    Add Category
 // @access  Private
 // @auth    Admin
-categoryRoutes.post('/', categoryController.addCategory);
+categoryRoutes.post('/', authenticate, authorization('admin'), categoryController.addCategory);
+
+// Get all Categories route
 // @route   GET api/category
-// @desc    get all Category
-// @access  Private
-// @auth    Admin
-categoryRoutes.get('/', categoryController.getCategories);
+// @desc    Get all Categories
+categoryRoutes.get('/', authenticate, categoryController.getCategories);
 
 module.exports = categoryRoutes;

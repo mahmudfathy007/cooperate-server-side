@@ -5,6 +5,10 @@ const chatController = require('../../controllers/chat.controller');
 
 const chatRoutes = express.Router();
 
-chatRoutes.get('/:conversationId', chatController.getAllMessages);
+// Get all messages for a conversation
+// @route   GET api/chat/:conversationId
+// @desc    Get all messages for a conversation
+// @access  Private
+chatRoutes.get('/:conversationId', authenticate, chatController.getAllMessages);
 
 module.exports = chatRoutes;

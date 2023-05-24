@@ -5,6 +5,10 @@ const reportController = require('../../controllers/report.controller');
 
 const reportRoutes = express.Router();
 
-reportRoutes.post('/:userId', reportController.postReport);
+// Post Report route
+// @route   POST api/report/:userId
+// @desc    Post a report for a user
+// @access  Private
+reportRoutes.post('/:userId', authenticate, reportController.postReport);
 
 module.exports = reportRoutes;

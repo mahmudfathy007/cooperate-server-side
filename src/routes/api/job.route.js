@@ -8,26 +8,26 @@ const jobRoutes = express.Router();
 // @desc    post a job
 // @access  Private
 // @auth    Client
-jobRoutes.post('/:userId', jobController.postJob);
+jobRoutes.post('/:userId', authenticate, authorization('client'), jobController.postJob);
 // @route   GET api/job
 // @desc    get all jobs posted by client
 // @access  Private
 // @auth    Client
-jobRoutes.get('/', jobController.getJobs);
+jobRoutes.get('/', authenticate, jobController.getJobs);
 // @route   GET api/job/:jobId
 // @desc    get single job details
 // @access  Private
 // @auth    Client
-jobRoutes.get('/:jobId', jobController.getJob);
+jobRoutes.get('/:jobId', authenticate, jobController.getJob);
 // @route   DELETE api/job/:userId
 // @desc    delete job
 // @access  Private
 // @auth    Client
-jobRoutes.delete('/:userId', jobController.deleteJob);
+jobRoutes.delete('/:userId', authenticate, authorization('client'), jobController.deleteJob);
 // @route   PATCH api/job/:userId
 // @desc    update job details
 // @access  Private
 // @auth    Client
-jobRoutes.patch('/:userId', jobController.updateJob);
+jobRoutes.patch('/:userId', authenticate, authorization('client'), jobController.updateJob);
 
 module.exports = jobRoutes;

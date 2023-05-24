@@ -5,17 +5,24 @@ const proposalController = require('../../controllers/proposal.controller');
 
 const proposalRoutes = express.Router();
 
-// @route   PUT api/proposal/:userId
-// @desc    send a proposal to client
+// Send Proposal route
+// @route   POST api/proposal/:userId
+// @desc    Send a proposal to a client
 // @access  Private
 // @auth    Freelancer
-proposalRoutes.post('/:userId', proposalController.sendProposal);
+proposalRoutes.post('/:userId', authenticate, authorization('freelancer'), proposalController.sendProposal);
 
-proposalRoutes.get('/:userId', proposalController.getClientProposals);
+// Get Client Proposals route
+// @route   GET api/proposal/:userId
+// @desc    Get proposals for a client
+// @access  Public
+proposalRoutes.get('/:userId', authenticate, proposalController.getClientProposals);
+
+// Decline Proposal route
 // @route   PUT api/proposal
-// @desc    decline Proposal
+// @desc    Decline a proposal
 // @access  Private
 // @auth    Client
-proposalRoutes.put('/', proposalController.declineProposal);
+proposalRoutes.put('/', authenticate, authorization('client'), proposalController.declineProposal);
 
 module.exports = proposalRoutes;

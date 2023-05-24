@@ -5,8 +5,16 @@ const conversationController = require('../../controllers/conversation.controlle
 
 const conversationRoutes = express.Router();
 
-conversationRoutes.post('/', conversationController.createConversation);
+// Create Conversation route
+// @route   POST api/conversation
+// @desc    Create a new conversation
+// @access  Private
+conversationRoutes.post('/', authenticate, conversationController.createConversation);
 
-conversationRoutes.get('/:userId', conversationController.getAllConversations);
+// Get All Conversations route
+// @route   GET api/conversation/:userId
+// @desc    Get all conversations for a user
+// @access  Public
+conversationRoutes.get('/:userId', authenticate, conversationController.getAllConversations);
 
 module.exports = conversationRoutes;

@@ -5,6 +5,10 @@ const { authorization } = require('../../middlewares/authorization');
 
 const freelancerRoutes = express.Router();
 
-freelancerRoutes.get('/', freelancerController.getFreelancers);
+// Get Freelancers route
+// @route   GET api/freelancer
+// @desc    Get all freelancers
+// @access  Public
+freelancerRoutes.get('/', authenticate, freelancerController.getFreelancers);
 
 module.exports = freelancerRoutes;

@@ -5,7 +5,7 @@ const notificationController = require('../../controllers/notification.controlle
 
 const notificationRoutes = express.Router();
 
-notificationRoutes.put('/:notificationId', notificationController.markAsRead);
+notificationRoutes.put('/:notificationId', authenticate, notificationController.markAsRead);
 
 notificationRoutes.get('/:userId', notificationController.getAllNotifications);
 

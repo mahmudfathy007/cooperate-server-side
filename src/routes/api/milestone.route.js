@@ -8,11 +8,11 @@ const milestoneRoutes = express.Router();
 // @desc    create a new milestone
 // @access  Private
 // @auth    Freelancer
-milestoneRoutes.post('/:projectId', milestoneController.createMilestone);
+milestoneRoutes.post('/:projectId', authenticate, authorization('freelancer'), milestoneController.createMilestone);
 // @route   PUT api/milestone/:milestoneId
 // @desc    update milestone
 // @access  Private
 // @auth    Freelancer
-milestoneRoutes.put('/:milestoneId', milestoneController.updateMilestone);
+milestoneRoutes.put('/:milestoneId', authenticate, authorization('freelancer'), milestoneController.updateMilestone);
 
 module.exports = milestoneRoutes;

@@ -5,12 +5,17 @@ const invitationController = require('../../controllers/invitation.controller');
 
 const invitationRoutes = express.Router();
 
+// Send Invitation route
 // @route   POST api/invitation/:userId
-// @desc    send invitation to freelancer
+// @desc    Send an invitation to a freelancer
 // @access  Private
 // @auth    Freelancer
-invitationRoutes.post('/:userId', invitationController.sendInvitation);
+invitationRoutes.post('/:userId', authenticate, authorization('client'), invitationController.sendInvitation);
 
-invitationRoutes.get('/:userId', invitationController.getInvitations);
+// Get Invitations route
+// @route   GET api/invitation/:userId
+// @desc    Get invitations for a user
+// @access  Public
+invitationRoutes.get('/:userId', authenticate, invitationController.getInvitations);
 
 module.exports = invitationRoutes;

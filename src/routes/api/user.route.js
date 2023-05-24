@@ -6,46 +6,90 @@ const { handleFileUpload, uploadImage, uploadCV } = require('../../middlewares/m
 
 const userRoutes = express.Router();
 
+// Change User Password route
 // @route   PUT api/user/change-password
 // @desc    Change user password
 // @access  Private
 userRoutes.put('/change-password', authenticate, userController.changePassword);
+
+// Get Single User Info route
 // @route   GET api/user/:userId
-// @desc    get single User info
+// @desc    Get single User info
 // @access  Private
 userRoutes.get('/:userId', userController.getUser);
+
+// Get All Users route
 // @route   GET api/user
-// @desc    get all users
+// @desc    Get all users
 // @access  Private
 // @auth    Admin
 userRoutes.get('/', authenticate, authorization('admin'), userController.getUsers);
-// @route   PATCH api/user
-// @desc    update single user
+
+// Update Single User route
+// @route   PATCH api/user/:userId
+// @desc    Update single user
 // @access  Private
-userRoutes.patch('/:userId', userController.updateUser);
+userRoutes.patch('/:userId', authenticate, userController.updateUser);
+
+// Update User Skills route
 // @route   PUT api/user/:userId/updateSkills
-// @desc    update usre skills
+// @desc    Update user skills
 // @access  Private
 // @auth    Freelancer
-userRoutes.put('/:userId/updateSkills', userController.updateSkills);
+userRoutes.put('/:userId/updateSkills', authenticate, userController.updateSkills);
+
+// Update User Categories route
 // @route   PUT api/user/:userId/updateCategories
-// @desc    update usre categories
+// @desc    Update user categories
 // @access  Private
 // @auth    Freelancer
-userRoutes.put('/:userId/updateCategories', userController.updateCategory);
+userRoutes.put('/:userId/updateCategories', authenticate, userController.updateCategory);
 
-userRoutes.put('/:userId/profilePic', handleFileUpload(uploadImage), userController.profilePic);
+// Update User Profile Picture route
+// @route   PUT api/user/:userId/profilePic
+// @desc    Update user profile picture
+// @access  Private
+userRoutes.put('/:userId/profilePic', authenticate, handleFileUpload(uploadImage), userController.profilePic);
 
-userRoutes.put('/:userId/cv', handleFileUpload(uploadCV), userController.cv);
+// Update User CV route
+// @route   PUT api/user/:userId/cv
+// @desc    Update user CV
+// @access  Private
+userRoutes.put('/:userId/cv', authenticate, handleFileUpload(uploadCV), userController.cv);
 
+// Delete User Account route
+// @route   DELETE api/user/:userId/deleteAccount
+// @desc    Delete user account
+// @access  Private
 userRoutes.delete('/:userId/deleteAccount', userController.deleteAccount);
 
-userRoutes.put('/:userId/createID', handleFileUpload(uploadImage), userController.createID);
+// Update User ID route
+// @route   PUT api/user/:userId/createID
+// @desc    Update user ID
+// @access  Private
+userRoutes.put('/:userId/createID', authenticate, handleFileUpload(uploadImage), userController.createID);
 
-userRoutes.put('/:userId/personalProjects', userController.addPersonalProject);
+// Add Personal Project route
+// @route   PUT api/user/:userId/personalProjects
+// @desc    Add personal project
+// @access  Private
+userRoutes.put('/:userId/personalProjects', authenticate, authorization('freelancer'), userController.addPersonalProject);
 
-userRoutes.delete('/:userId/personalProjects', userController.removePersonalProject);
+// Remove Personal Project route
+// @route   DELETE api/user/:userId/personalProjects
+// @desc    Remove personal project
+// @access  Private
+userRoutes.delete(
+  '/:userId/personalProjects',
+  authenticate,
+  authorization('freelancer'),
+  userController.removePersonalProject
+);
 
-userRoutes.get('/:userId/getWorkHistory', userController.getWorkHistory);
+// Get User Work History route
+// @route   GET api/user/:userId/getWorkHistory
+// @desc    Get user work history
+// @access  Private
+userRoutes.get('/:userId/getWorkHistory', authenticate, userController.getWorkHistory);
 
 module.exports = userRoutes;

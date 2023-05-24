@@ -5,20 +5,25 @@ const skillController = require('../../controllers/skill.controller');
 
 const skillRoutes = express.Router();
 
+// Add Skill route
 // @route   POST api/skill
-// @desc    get all users
+// @desc    Add a skill
 // @access  Private
 // @auth    Admin
-skillRoutes.post('/', skillController.addSkill);
+skillRoutes.post('/', authenticate, authorization('admin'), skillController.addSkill);
+
+// Get All Skills route
 // @route   GET api/skill
-// @desc    get all skills
+// @desc    Get all skills
 // @access  Private
 // @auth    Admin
-skillRoutes.get('/', skillController.getSkills);
+skillRoutes.get('/', authenticate, skillController.getSkills);
+
+// Delete Skill route
 // @route   DELETE api/skill
-// @desc    delete Skill
+// @desc    Delete a skill
 // @access  Private
 // @auth    Admin
-skillRoutes.delete('/', skillController.deleteSkills);
+skillRoutes.delete('/', authenticate, authorization('admin'), skillController.deleteSkills);
 
 module.exports = skillRoutes;
