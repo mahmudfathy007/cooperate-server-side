@@ -15,9 +15,8 @@ skillRoutes.post('/', authenticate, authorization('admin'), skillController.addS
 // Get All Skills route
 // @route   GET api/skill
 // @desc    Get all skills
-// @access  Private
-// @auth    Admin
-skillRoutes.get('/', authenticate, skillController.getSkills);
+// @access  Public
+skillRoutes.get('/', skillController.getSkills);
 
 // Delete Skill route
 // @route   DELETE api/skill

@@ -15,6 +15,6 @@ categoryRoutes.post('/', authenticate, authorization('admin'), categoryControlle
 // Get all Categories route
 // @route   GET api/category
 // @desc    Get all Categories
-categoryRoutes.get('/', authenticate, categoryController.getCategories);
+categoryRoutes.get('/', categoryController.getCategories);
 
 module.exports = categoryRoutes;

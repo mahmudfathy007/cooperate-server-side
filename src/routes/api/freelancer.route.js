@@ -9,6 +9,6 @@ const freelancerRoutes = express.Router();
 // @route   GET api/freelancer
 // @desc    Get all freelancers
 // @access  Public
-freelancerRoutes.get('/', authenticate, freelancerController.getFreelancers);
+freelancerRoutes.get('/', freelancerController.getFreelancers);
 
 module.exports = freelancerRoutes;

@@ -10,5 +10,11 @@ const reportRoutes = express.Router();
 // @desc    Post a report for a user
 // @access  Private
 reportRoutes.post('/:userId', authenticate, reportController.postReport);
+// Post Report route
+// @route   GET api/report
+// @desc    GET reports for a user
+// @access  Private
+// @auth    Admin
+reportRoutes.get('/', authenticate, authorization('admin'), reportController.getReports);
 
 module.exports = reportRoutes;

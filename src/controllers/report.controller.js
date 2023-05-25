@@ -20,7 +20,25 @@ const postReport = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
-
+const getReports = async (req, res) => {
+  try {
+    const reports = await Report.find()
+      .populate({
+        path: 'reported_user',
+        select: 'first_name last_name role',
+        model: User,
+      })
+      .populate({
+        path: 'userId',
+        select: 'first_name last_name role',
+        model: User,
+      });
+    return res.status(201).json({ reports });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
 module.exports = {
   postReport,
+  getReports
 };

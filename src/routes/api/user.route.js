@@ -15,7 +15,7 @@ userRoutes.put('/change-password', authenticate, userController.changePassword);
 // Get Single User Info route
 // @route   GET api/user/:userId
 // @desc    Get single User info
-// @access  Private
+// @access  Public
 userRoutes.get('/:userId', userController.getUser);
 
 // Get All Users route

@@ -11,14 +11,12 @@ const jobRoutes = express.Router();
 jobRoutes.post('/:userId', authenticate, authorization('client'), jobController.postJob);
 // @route   GET api/job
 // @desc    get all jobs posted by client
-// @access  Private
-// @auth    Client
-jobRoutes.get('/', authenticate, jobController.getJobs);
+// @access  Public
+jobRoutes.get('/', jobController.getJobs);
 // @route   GET api/job/:jobId
 // @desc    get single job details
-// @access  Private
-// @auth    Client
-jobRoutes.get('/:jobId', authenticate, jobController.getJob);
+// @access  Public
+jobRoutes.get('/:jobId', jobController.getJob);
 // @route   DELETE api/job/:userId
 // @desc    delete job
 // @access  Private
