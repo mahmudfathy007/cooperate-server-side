@@ -58,7 +58,8 @@ const confrimEmail = async (req, res) => {
     // Update emailVerified field
     await User.findByIdAndUpdate(userId, { isEmailVerified: true });
 
-    return res.status(200).json({ message: 'Email verified successfully.' });
+    // Redirect to the desired URL
+    return res.redirect('http://localhost:3000/oauth');
   } catch (err) {
     return res.status(500).json({ message: 'An error occurred while verifying email.', error: err });
   }

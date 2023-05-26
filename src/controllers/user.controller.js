@@ -330,16 +330,22 @@ const deleteAccount = async (req, res) => {
 const createID = async (req, res) => {
   try {
     const { userId } = req.params;
+    // Read the image file synchronously
     const imageData = fs.readFileSync(req.file.path);
+    // Update the user's IDimage field with the image data
     const updatedUser = await User.findByIdAndUpdate(userId, { IDimage: imageData });
     await updatedUser.save();
+    // Delete the temporary file from the file system
     fs.unlinkSync(req.file.path);
+    // Send a success response
     res.status(200).json({ message: 'New image saved to database' });
   } catch (error) {
+    // If an error occurs, log it and send an error response
     console.error(error);
     res.status(500).json({ message: 'Failed to save image to database' });
   }
 };
+
 
 const addPersonalProject = async (req, res) => {
   const { userId } = req.params;

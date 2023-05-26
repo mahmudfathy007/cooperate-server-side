@@ -45,13 +45,19 @@ async function ShowResult() {
 
 async function createClientsAndFreelancersAccounts() {
   try {
+    // Retrieve categories and their associated skills
     const categories = await Category.find().populate({ path: 'skills', model: Skill });
-
+    // Array to store created client accounts
     const clients = [];
+    // Counter for the total number of jobs created
     let numJobsCreated = 0;
 
+    // Creating client accounts
     for (let i = 0; i < NUM_CLIENTS; i++) {
+      // Generate random number of jobs for each client
       const numJobs = faker.datatype.number({ min: MIN_JOBS_PER_CLIENT, max: MAX_JOBS_PER_CLIENT });
+
+      // Create a new user account for the client
       const user = await User.create({
         first_name: faker.name.firstName(),
         last_name: faker.name.lastName(),
@@ -61,9 +67,12 @@ async function createClientsAndFreelancersAccounts() {
         role: 'client',
         country: faker.address.country(),
       });
-
+      // Array to store created jobs for the client
       const jobs = [];
+
+      // Creating jobs for the client
       for (let j = 0; j < numJobs; j++) {
+        // Create a new job
         const job = await Job.create({
           title: faker.name.jobTitle(),
           description: faker.lorem.paragraph(),
@@ -80,6 +89,7 @@ async function createClientsAndFreelancersAccounts() {
         const numJobSkills = faker.datatype.number({ min: MIN_SKILLS_PER_CATEGORY, max: MAX_SKILLS_PER_CATEGORY });
         const jobSkills = [];
 
+        // Select random skills for the job from the category's skills
         for (let k = 0; k < numJobSkills; k++) {
           const randomSkill = faker.helpers.arrayElement(categorySkills);
           if (!jobSkills.includes(randomSkill)) {
@@ -99,11 +109,13 @@ async function createClientsAndFreelancersAccounts() {
       await user.save();
       clients.push(user);
     }
+
     console.log(`${NUM_CLIENTS} client accounts were created successfully with ${numJobsCreated} jobs!`);
 
-    // create freelancers
+    // Create freelancer accounts
     const freelancers = [];
     for (let i = 0; i < NUM_FREELANCERS; i++) {
+      // Create a new user account for the freelancer
       const user = await User.create({
         first_name: faker.name.firstName(),
         last_name: faker.name.lastName(),
@@ -116,6 +128,8 @@ async function createClientsAndFreelancersAccounts() {
 
       const userSkills = [];
       const selectedCategories = faker.helpers.shuffle(categories).slice(0, 2);
+
+      // Select skills for the freelancer from the selected categories
       selectedCategories.forEach((category) => {
         const categorySkills = category.skills.map((skill) => skill._id);
 
@@ -140,6 +154,7 @@ async function createClientsAndFreelancersAccounts() {
     console.error(error);
   }
 }
+
 
 async function assignJobsToFreelancers() {
   try {

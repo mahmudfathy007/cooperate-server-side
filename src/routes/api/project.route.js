@@ -11,7 +11,7 @@ const projectRoutes = express.Router();
 // @desc    Accept a proposal and turn it into a project
 // @access  Private
 // @auth    Client
-projectRoutes.post('/', authenticate, authorization('Client'), projectController.createProject);
+projectRoutes.post('/', authenticate, authorization('client'), projectController.createProject);
 
 // Get User Projects route
 // @route   GET api/project/:userId
@@ -29,7 +29,7 @@ projectRoutes.get('/', projectController.getProject);
 // @route   PUT api/project/:userId
 // @desc    Mark a project as complete
 // @access  Private
-projectRoutes.put('/:userId', authenticate, authorization('Client'), projectController.markAsComplete);
+projectRoutes.put('/:userId', authenticate, authorization('client'), projectController.markAsComplete);
 
 // Upload Project route
 // @route   PUT api/project/:projectId/uploadProject
