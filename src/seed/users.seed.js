@@ -155,7 +155,6 @@ async function createClientsAndFreelancersAccounts() {
   }
 }
 
-
 async function assignJobsToFreelancers() {
   try {
     const projectData = [];

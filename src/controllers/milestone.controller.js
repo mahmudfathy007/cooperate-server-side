@@ -8,7 +8,10 @@ const createMilestone = async (req, res) => {
     const { title } = req.body;
     //check if the project is already exists or not
     const existingProject = await Project.findById(projectId);
-    if (existingProject) {
+    if (existingProject.status === 'Complete') {
+      return res.status(400).json({ message: 'Project is already completed.' });
+    }
+    if (existingProject && existingProject.status === 'In progress') {
       const milestone = await Milestone.create({
         title,
       });

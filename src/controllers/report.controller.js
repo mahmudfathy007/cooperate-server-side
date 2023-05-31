@@ -40,5 +40,5 @@ const getReports = async (req, res) => {
 };
 module.exports = {
   postReport,
-  getReports
+  getReports,
 };
